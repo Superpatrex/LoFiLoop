@@ -1,29 +1,31 @@
 import React from 'react';
-import ExampleComponent from './components/ExampleComponent';
-import AnotherExampleComponent from './components/AnotherExampleComponent';
-import jackImage from './literally_jack.webp';
-import alsoJackImage from './jack_rizz.webp';
-import sound from './rizz-sounds.mp3';
-import AMONG_US from './AMONG_US.mp3';
+import { fetchDalleImage } from './api/dalle';
 
 function App() {
+
+
+    const [dalleImage, setDalleImage] = React.useState(null);
+
+    const handle_click = () => {
+        console.log("I was clicked");
+        call_api();
+    } 
+
+    const call_api = async () => {
+        const response = await fetchDalleImage("A lofi album cover");
+        // console.log(response)
+        setDalleImage(response.data[0].url);
+    }
+
+
+
+
+
     return (
         <div>
-            <h1>Welcome to a React App MADE BY JACK NO WAY....WOW! JACK IS SO COOL</h1>
-            <ExampleComponent />
-            <AnotherExampleComponent />
-            <audio controls loop autoPlay>
-                <source src={sound} type="audio/mpeg" />
-                Your browser does not support the audio element.
-            </audio>
-            <audio controls loop autoPlay>
-                <source src={AMONG_US} type="audio/mpeg" />
-                Your browser does not support the audio element.
-            </audio>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <img src={jackImage} alt="Jack" />
-                <img src={alsoJackImage} alt="Jack" />
-            </div>
+            <button onClick={handle_click}>Click me</button>
+            {dalleImage && <img src={dalleImage} alt="DALL·E" />}
+
         </div>
     );
 }

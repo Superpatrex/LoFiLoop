@@ -1,3 +1,4 @@
+const axios = require('axios');
 const OpenAI = require('openai');
 require('dotenv').config();
 
@@ -26,4 +27,30 @@ async function generateSongInfo(prompt) {
     }
 }
 
-module.exports = { generateSongInfo };
+async function generateAlbumArt(prompt) {
+    
+    let config = {
+        method: 'post',
+        url: 'https://api.openai.com/v1/images/generations',
+        headers: { 
+        'Content-Type': 'application/json', 
+        'Authorization': `Bearer ${OPENAI_API_KEY}`
+        },
+        data: JSON.stringify({
+        "model": "dall-e-3",
+        "prompt": prompt,
+        "n": 1,
+        "size": "1024x1024"
+        })
+    };
+    
+    try {
+        const response = await axios.request(config);
+        // console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching DALL·E image:", error.response?.data || error.message);
+    }
+}
+
+module.exports = { generateSongInfo, generateAlbumArt };

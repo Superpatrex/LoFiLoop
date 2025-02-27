@@ -3,24 +3,26 @@ const nodemailer = require("nodemailer");
 const app = express();
 const path = require("path");
 const port = process.env.PORT || 3001;
-const { generateSongText, generateAlbumArt } = require('./openai');
+const openaiRoutes = require("./routes/openaiRoutes");
+const listenersRoutes = require("./routes/listenersRoutes");
+const { connectDB } = require("./db");
+const cors = require("cors");
 
 app.use(express.json());
 
-// new endpoint for ChatGPT
-app.post('/generateAlbumText', async (req, res) => {
-  const { prompt } = req.body;
-  
-  const result = await generateSongText(prompt);
-  res.json(result); // return JSON response
-})
+connectDB();
+app.use(cors());
+app.use(express.json()); // Middleware to parse JSON
 
-app.post('/generateAlbumArt', async (req, res) => {
-    const { prompt } = req.body;
-    
-    const result = await generateAlbumArt(prompt);
-    res.json(result); // return JSON response
-  })
+// Routes--------------------------------------------------------------
+
+app.use("/listeners", listenersRoutes);
+app.use("/openai", openaiRoutes);
+
+// ---------------------------------------------------------------
+
+
+
 
 
 function sendEmail(email) { //use nodemailer to send email

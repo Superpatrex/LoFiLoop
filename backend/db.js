@@ -10,4 +10,9 @@ const connectDB = async () => {
   }
 };
 
-module.exports = connectDB;
+// Function to switch databases
+const getDatabase = (dbName) => {
+  return mongoose.connection.useDb(dbName);
+};
+
+module.exports = { connectDB, getDatabase };

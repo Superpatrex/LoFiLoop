@@ -4,8 +4,16 @@ const app = express();
 const path = require("path");
 const port = process.env.PORT || 3001;
 const { generateSongText, generateAlbumArt } = require('./openai');
+const listenersRoutes = require("./routes/listenersRoutes");
+const { connectDB } = require("./db");
+const cors = require("cors");
 
 app.use(express.json());
+
+connectDB();
+app.use(cors());
+app.use(express.json()); // Middleware to parse JSON
+
 
 // new endpoint for ChatGPT
 app.post('/generateAlbumText', async (req, res) => {
@@ -20,7 +28,13 @@ app.post('/generateAlbumArt', async (req, res) => {
     
     const result = await generateAlbumArt(prompt);
     res.json(result); // return JSON response
-  })
+})
+
+
+app.use("/listeners", listenersRoutes);
+
+
+
 
 
 function sendEmail(email) { //use nodemailer to send email

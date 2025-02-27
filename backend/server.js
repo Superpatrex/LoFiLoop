@@ -15,9 +15,9 @@ app.post('/generate', async (req, res) => {
   res.json(result); // return JSON response
 })
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server is running on port ${port}`);
+// });
 
 function sendEmail(email) { //use nodemailer to send email
     return new Promise((resolve, reject) => {

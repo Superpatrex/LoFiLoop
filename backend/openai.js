@@ -6,7 +6,7 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const openai = new OpenAI();
 
 // Function to generate song title and artist
-async function generateSongInfo(prompt) {
+async function generateSongText(prompt) {
     try {
         const response = await openai.chat.completions.create(
             {
@@ -53,4 +53,4 @@ async function generateAlbumArt(prompt) {
     }
 }
 
-module.exports = { generateSongInfo, generateAlbumArt };
+module.exports = { generateSongText, generateAlbumArt };

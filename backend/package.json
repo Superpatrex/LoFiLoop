@@ -5,11 +5,13 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "http": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.10.2",
     "nodemailer": "^6.10.0",
     "nodemon": "^3.1.9",
-    "openai": "^4.85.4"
+    "openai": "^4.85.4",
+    "ws": "^8.18.1"
   },
   "name": "backend",
   "version": "1.0.0",

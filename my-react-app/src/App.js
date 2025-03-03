@@ -5,13 +5,15 @@ import jackImage from './literally_jack.webp';
 import alsoJackImage from './jack_rizz.webp';
 import sound from './rizz-sounds.mp3';
 import AMONG_US from './AMONG_US.mp3';
-import SignUp from './components/SignUp';
+import LogIn from './components/LogIn';
 import PageTitle from './components/PageTitle';
+import SignUp from '.components/SignUp';
 
 function App() {
     return (
         <>
             <PageTitle />
+            <LogIn />
             <SignUp />
         </>
     );

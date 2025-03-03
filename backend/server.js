@@ -1,5 +1,6 @@
 require("dotenv").config();
-const express = require("express");
+const express = require('express');
+const cors = require('cors'); // Import the cors middleware
 const mongoose = require("mongoose");
 //const path = require("path");
 const authRoutes = require("./routes/authRoutes");
@@ -7,6 +8,7 @@ const authRoutes = require("./routes/authRoutes");
 const app = express();
 const port = process.env.PORT || 3001;
 
+app.use(cors({ origin: "http://localhost:3000" })); // CORS middleware with options
 app.use(express.json());
 app.use("/routes", authRoutes);
 

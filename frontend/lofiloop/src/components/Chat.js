@@ -11,7 +11,22 @@ export default function Chat() {
   const [input, setInput] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [songTitle, setSongTitle] = useState("Loading...");
   const audioRef = useRef(null);
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+  };
+
+  useEffect(() => {
+    if (audioRef.current) {
+      const audioSrc = audioRef.current.src;
+      const fileName = audioSrc.substring(audioSrc.lastIndexOf("/") + 1).replace(".mp3", "");
+      setSongTitle(decodeURIComponent(fileName.replace(/_/g, " ")));
+    }
+  }, []);
 
   const sendMessage = () => {
     if (input.trim() === "") return;
@@ -67,7 +82,7 @@ export default function Chat() {
                 <div className="w-40 h-40 bg-gray-500 rounded-full"></div>
               </div>
             </div>
-            <h2 className="text-white text-3xl font-bold">Placeholder</h2>
+            <h2 className="text-white text-3xl font-bold">{songTitle}</h2>
             <p className="text-gray-400 text-lg">AI-generated Lofi Music</p>
 
             <audio ref={audioRef} src="lukrembo_biscuit.mp3" />
@@ -77,8 +92,8 @@ export default function Chat() {
                 <div className="absolute top-0 h-full bg-white rounded-full" style={{ width: `${progress}%` }}></div>
               </div>
               <div className="w-full flex justify-between text-white text-sm">
-                <span>{audioRef.current ? Math.floor(audioRef.current.currentTime) : 0}s</span>
-                <span>{audioRef.current ? Math.floor(audioRef.current.duration) : 0}s</span>
+                <span>{audioRef.current ? formatTime(audioRef.current.currentTime) : "0:00"}</span>
+                <span>{audioRef.current ? formatTime(audioRef.current.duration) : "0:00"}</span>
               </div>
             </div>
 

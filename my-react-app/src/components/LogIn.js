@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './LogIn.css';
 
-const Login = () => {
-    const [email, setEmail] = useState('');
+const LogIn = () => {
+    const [identifier, setIdentifier] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState([]);
 
-    const validateEmail = (email) => {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const validateIdentifier = (identifier) => {
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
+        const isUsername = /^[a-zA-Z0-9_]+$/.test(identifier);
+        return isEmail || isUsername;
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         let validationErrors = [];
 
-        if (!validateEmail(email)) {
-            validationErrors.push('Invalid email format.');
+        if (!validateIdentifier(identifier)) {
+            validationErrors.push('Invalid username or email format.');
         }
 
         if (password.length === 0) {
@@ -40,12 +43,12 @@ const Login = () => {
                 </ul>
             )}
             <form onSubmit={handleSubmit}>
-                <label>Email</label>
+                <label>Username or Email</label>
                 <input
-                    type="email"
+                    type="text"
                     required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value)}
                 />
                 
                 <label>Password</label>
@@ -58,8 +61,11 @@ const Login = () => {
                 
                 <button type="submit">Login</button>
             </form>
+            <p>
+                Haven't signed up yet? <Link to="/signup">Click here</Link>
+            </p>
         </div>
     );
 };
 
-export default Login;
+export default LogIn;

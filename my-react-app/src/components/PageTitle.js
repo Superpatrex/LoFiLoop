@@ -4,7 +4,7 @@ import './PageTitle.css';
 const PageTitle = () => {
     return (
         <div>
-            <h1 className="page-title">LofiLoop</h1>
+            <h1 className="page-title">LoFiLoop</h1>
         </div>
     );
 };

@@ -1,21 +1,22 @@
 import React from 'react';
-import ExampleComponent from './components/ExampleComponent';
-import AnotherExampleComponent from './components/AnotherExampleComponent';
-import jackImage from './literally_jack.webp';
-import alsoJackImage from './jack_rizz.webp';
-import sound from './rizz-sounds.mp3';
-import AMONG_US from './AMONG_US.mp3';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LogIn from './components/LogIn';
 import PageTitle from './components/PageTitle';
-import SignUp from '.components/SignUp';
+import SignUp from './components/SignUp';
+import NavBar from './components/NavBar';
 
 function App() {
     return (
-        <>
+        <Router>
             <PageTitle />
-            <LogIn />
-            <SignUp />
-        </>
+            <NavBar />
+            <Routes>
+                <Route path="/" element={<LogIn />} />
+                <Route path="/login" element={<LogIn />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/auth" element={<LogIn />} /> {/* Joint LogIn/SignUp tab */}
+            </Routes>
+        </Router>
     );
 }
 

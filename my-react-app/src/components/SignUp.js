@@ -50,38 +50,51 @@ const SignUp = () => {
                 </ul>
             )}
             <form onSubmit={handleSubmit}>
-                <label>Create Username</label>
-                <input
-                    type="text"
-                    required
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
+                <div className="form-group">
+                    <div className="form-inputs">
+                        <label>Create Username</label>
+                        <input
+                            type="text"
+                            required
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
 
-                <label>Email</label>
-                <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                
-                <label>Set Password</label>
-                <input
-                    type="password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+                        <label>Email</label>
+                        <input
+                            type="email"
+                            required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        
+                        <label>Set Password</label>
+                        <input
+                            type="password"
+                            required
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
 
-                <label>Type Password Again</label>
-                <input
-                    type="password"
-                    required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-                
+                        <label>Type Password Again</label>
+                        <input
+                            type="password"
+                            required
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                        />
+                    </div>
+                    <div className="password-requirements">
+                        <h3>Password Requirements:</h3>
+                        <ul>
+                            <li>At least 8 characters long</li>
+                            <li>Includes an uppercase letter</li>
+                            <li>Includes a lowercase letter</li>
+                            <li>Includes a number</li>
+                            <li>Includes a special character</li>
+                        </ul>
+                    </div>
+                </div>
                 <button type="submit">Sign Up!</button>
             </form>
         </div>

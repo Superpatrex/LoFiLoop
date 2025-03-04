@@ -4,7 +4,7 @@
     border-radius: 25px;
     padding: 40px;
     width: 400px;
-    height: 300px;
+    height: 330px;
     background-color: #272c4c;
     box-shadow: 5px 5px 5px #252337;
 }
@@ -86,3 +86,16 @@
     list-style-type: none;
     padding: 0;
 }
+
+.Login p {
+    color: white;
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif; 
+    font-size: 15px; 
+    font-style: normal; 
+    font-variant: normal; 
+    font-weight: 540; 
+    line-height: 26.4px;
+    text-align: center;
+    padding-top: 10px;
+}
+

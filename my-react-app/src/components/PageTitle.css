@@ -1,7 +1,7 @@
 body {
     background: rgb(0,0,0);
     background: linear-gradient(34deg, rgba(0,0,0,1) 0%, rgba(39,44,76,1) 31%, rgba(78,49,77,1) 45%);
-    height: 100vh;
+    height: 110vh;
 }
 
 .page-title {

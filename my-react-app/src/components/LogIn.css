@@ -4,7 +4,7 @@
     border-radius: 25px;
     padding: 40px;
     width: 400px;
-    height: 330px;
+    height: 390px;
     background-color: #272c4c;
     box-shadow: 5px 5px 5px #252337;
 }
@@ -97,5 +97,6 @@
     line-height: 26.4px;
     text-align: center;
     padding-top: 10px;
+    padding-bottom: 0;
 }
 

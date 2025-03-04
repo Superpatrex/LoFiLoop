@@ -4,6 +4,8 @@ import LogIn from './components/LogIn';
 import PageTitle from './components/PageTitle';
 import SignUp from './components/SignUp';
 import NavBar from './components/NavBar';
+import ForgotPassword from './components/ForgotPassword'; 
+
 
 function App() {
     return (
@@ -14,7 +16,9 @@ function App() {
                 <Route path="/" element={<LogIn />} />
                 <Route path="/login" element={<LogIn />} />
                 <Route path="/signup" element={<SignUp />} />
-                <Route path="/auth" element={<LogIn />} /> {/* Joint LogIn/SignUp tab */}
+                <Route path="/auth" element={<LogIn />} /> 
+                <Route path="/forgot-password" element={<ForgotPassword />} /> 
+                
             </Routes>
         </Router>
     );

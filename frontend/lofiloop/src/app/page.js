@@ -4,6 +4,6 @@ import ForgotPassword from "./ForgotPassword";
 
 export default function Home() {
   return (
-    <ForgotPassword/>
+    <ExampleSketch/>
     );
 }

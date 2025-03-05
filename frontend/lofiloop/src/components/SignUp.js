@@ -18,7 +18,7 @@ const SignUp = () => {
         return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])[A-Za-z\d!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]{8,}$/.test(password);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         let validationErrors = [];
 
@@ -36,9 +36,32 @@ const SignUp = () => {
 
         setErrors(validationErrors);
 
+        //connecting the backend!
         if (validationErrors.length === 0) {
-            alert('Sign-up successful!');
-        }
+            try {
+                const response = await fetch('http://localhost:3001/routes/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, email, password }), // Send data to backend
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Registration successful
+                    alert(data.message || 'Sign-up successful!'); 
+                    // You might want to redirect the user to the login page here
+                } else {
+                    // Registration failed
+                    setErrors([data.message || 'Registration failed']);
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                setErrors(['An error occurred. Please try again.']);
+            }
+        } 
     };
 
     return (

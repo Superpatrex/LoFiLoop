@@ -10,7 +10,7 @@ const Login = () => {
 
     const validateEmail = (email) => /^[^\s@]+@[^\s@]+.[^\s@]+$/.test(email);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         let validationErrors = [];
 
@@ -24,8 +24,31 @@ const Login = () => {
 
         setErrors(validationErrors);
 
+        //connecting backend!!
         if (validationErrors.length === 0) {
-            alert('Login successful!');
+            try {
+                const response = await fetch('http://localhost:3001/routes/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Login successful
+                    localStorage.setItem('token', data.token); // Store JWT in localStorage
+                    alert('Login successful!');
+                } else {
+                    // Login failed
+                    setErrors([data.message || 'Login failed']);
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                setErrors(['An error occurred. Please try again.']);
+            }
         }
     };
 

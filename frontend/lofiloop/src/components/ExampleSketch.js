@@ -5,7 +5,7 @@
 import dynamic from "next/dynamic";
 
 // Dynamically import P5Wrapper with no SSR
-const P5Wrapper = dynamic(() => import("./Visualizer"), {
+const P5Wrapper = dynamic(() => import("../app/Visualizer"), {
     ssr: false,
 });
 

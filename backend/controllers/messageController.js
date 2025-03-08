@@ -1,64 +1,71 @@
 const Message = require("../models/Message");
-const { handleRequest, handleQueue } = require("../utils/songRequests");
+const User = require("../models/User");
+const { handleRequest, handleQueue, handleCommands } = require("../utils/songRequests");
 
 // send message
-const sendMessage = async(req, res) => {
+const sendMessage = async (req, res) => {
     try {
-        const { senderId, text, roomId } = req.body;
+        const { senderId, text } = req.body;
 
-        // validate roomId
-        if (!["songRequests", "globalChat"].includes(roomId)) {
-            return res.status(400).json({ error: "Invalid room" });
+        if (!senderId || !text) {
+            return res.status(400).json({ error: "senderId and text are required"});
         }
 
+        // fetch user details from database
+        const user = await User.findById(senderId);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        const username = user.username;
+
+        let responseMessage = null;
+
         // enforce chat rules
-        if (roomId === "songRequests" && 
-            !text.startsWith("/request ") && 
-            text !== "/queue" &&
-            text !== "/mood" &&
-            text !== "/commands") {
+        if (!text.startsWith("/")) {
+            console.log("Regular message recieved");
+        } else if (text.startsWith("/request ")) {
+            const result = await handleRequest(text, senderId, username);
+            responseMessage = result.message;
+        } else if (text == "/queue") {
+            const result = await handleQueue();
+            responseMessage = result.message;
+        } else if (text == "/commands") {
+            const result = await handleCommands();
+            responseMessage = result.message;
+        } else {
             return res.status(400).json({ error: "Type '/commands' for a list of commands"});
         }
 
-        if (roomId === "globalChat" && text.trim().startsWith("/request ")) {
-            return res.status(400).json({ error: "Song requests are not allowed in global chat"});
-        }
-
         // save message
-        const message = new Message({ senderId, text, roomId });
+        const message = new Message({ senderId, text });
         await message.save();
 
-        res.status(201).json(message);
+        console.log("Message saved:, " + message);
+
+        res.status(201).json(responseMessage ? { message: responseMessage } : message);
     } catch (error) {
-        res.status(500).json({ error: "Server error"});
+        console.error("Error in sendMessage:", error);
+        res.status(500).json({ error: "Server error: Unable to send message" });
     }
 };
 
-// get messages for a specific room
-const getMessagesByRoom = async (req, res) => {
+// Get all messages
+const getMessages = async (req, res) => {
     try {
-        const { roomId } = req.params;
+        // Retrieve all messages from the global chat, sorted by timestamp
+        const messages = await Message.find().sort({ createdAt: -1 });
 
-        if (!["songRequests", "globalChat"].includes(roomId)) {
-            return res.status(400).json({ error: "Invalid room" });
+        // If there are no messages
+        if (!messages || messages.length === 0) {
+            return res.status(404).json({ message: "No messages found" });
         }
 
-        const messages = await Message.find({ roomId }).sort({ createdAt: 1 });
-        res.json(messages);
+        // Send the messages as response
+        return res.status(200).json(messages);
     } catch (error) {
-        res.status(500).json({ error: "Server error" });
+        console.error('Error fetching messages:', error);
+        return res.status(500).json({ error: 'Error fetching messages' });
     }
 };
 
-// handles commands in songRequest room
-const handleSongRequestMessage = async (message, user) => {
-    if (message.startsWith("/request ")) {
-        return await handleRequest(message, user);
-    } else if (message == "/queue") {
-        return await handleQueue();
-    } else {
-        return { error: "Type '/commands' for a list of commands" };
-    }
-};
-
-module.exports = { sendMessage, getMessagesByRoom, handleSongRequestMessage };
+module.exports = { sendMessage, getMessages };

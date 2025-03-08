@@ -11,16 +11,7 @@ const messageSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        roomId: {
-            type: String,
-            enum: ["songRequests", "globalChat"],
-            required: true
-        },
-        createdAt: {
-            type: Date,
-            default: Date.now
-        }
-    });
+    }, { timestamps: true});
 
 const Message = mongoose.model("Message", messageSchema);
 

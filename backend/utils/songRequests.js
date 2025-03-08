@@ -14,48 +14,92 @@ async function generateAIMusic(songRequest) {
 }
 
 // handle "/request <song>"
-async function handleRequest(songRequest, user) {
+async function handleRequest(songRequest, senderId, username) {
     const song = songRequest.replace("/request ", "").trim();
+
     if (!song) {
         return { error: "Invalid request format. Use /request <song name>." };
     }
 
-    // get ai-generated song details
-    const songInfo = await generateSongInfo(song);
+    const openAIResponse = await generateSongInfo(song);
 
-    // generate AI music (connect to Anna's part)
-    const generatedTrack = await generateAIMusic(song);
+    // parse the OpenAI response from generateSongInfo
+    console.log("OpenAI Response: ", openAIResponse);
+
+    if (!openAIResponse) {
+        throw new Error("OpenAI response is undefined or empty.");
+        }
+    const parsedResponse = JSON.parse(openAIResponse);
+
+    // extract title and artist
+    const title = parsedResponse.title;
+    const artist = parsedResponse.artist;
+
+    if (!title || !artist) {
+        throw new Error("Invalid OpenAI response: Missing title or artist");
+    }
+
+    // generate a placeholder track path
+    const track = `generated_tracks/${title}_${artist}.mp3`;
+
+    // // generate AI music (connect to Anna's part)
+    // const generatedTrack = await generateAIMusic(song);
 
    // add song request to the queue in MongoDB
     const newSong = new SongQueue({
-        title: songInfo.title,
-        artist: songInfo.artist,
-        user: user,
-        track: generatedTrack
+        title,
+        artist,
+        userId: senderId,
+        username,
+        track
     });
 
     await newSong.save();  // save the song to the database
-
-    return { message: `Track added to the queue: "${songInfo.title}" by ${songInfo.artist}` };
+    
+    console.log("Song added to queue: ", newSong);
+    return { message: `Track added to the queue: "${title}" by ${artist}` };
 }
 
 // handle "/queue"
 async function handleQueue() {
+    
     const queue = await SongQueue.find().sort({ timestamp: 1 });
 
     if (queue.length === 0) {
         return { message: "The queue is currently empty." };
     }
 
-    const currentSong = await SongQueue.findOne().sort({ timestamp: -1 });
+    const currentSong = await SongQueue.find().sort({ timestamp: 1 }).limit(1);
+
+    if (currentSong.length === 0) {
+        return { message: "No current song." };
+    }
+
+    const index = currentSong.length - 1;
+    
+    const currentSongData = currentSong[index];
 
     // format the song queue
-    const queueList = songQueue.map((item, index) => 
-        `${index + 1}. ${item.title} (requested by ${item.user})`
+    const queueList = queue.map((item, index) => 
+        `${index + 1}. ${item.title} (requested by ${item.artist})`
     ).join("\n");
 
     return { 
-        message: `**Current Song Queue:**\n${queueList}\nNow Playing: ${currentSong.title} by ${currentSong.artist}`
+        message: `**Current Song Queue:**\n${queueList}\nNow Playing: ${currentSongData.title} by ${currentSongData.artist}`
+    };
+}
+
+async function handleCommands() {
+    return {
+        message: `🎵 **Song Request Commands** 🎵
+
+Use the following commands to interact with the song request system:
+
+✅ **/request <song name>** – Add a song to the queue.  
+✅ **/queue** – View the current song queue.
+✅ **/commands** – Display this list of commands.
+
+Enjoy the music! 🎶`
     };
 }
 
@@ -64,4 +108,4 @@ async function handleQueue() {
 //     // this will require an OpenAI API call
 // }
 
-module.exports = { handleRequest, handleQueue };
+module.exports = { handleRequest, handleQueue, handleCommands };

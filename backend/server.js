@@ -12,10 +12,17 @@ const songRequestRoutes = require('./utils/songRequests');
 
 // middleware
 app.use(express.json());
+const cors = require("cors");
+app.use(cors({ origin: "http://localhost:3000" }));
 
 // set up the HTTP server and integrate Socket.io
 const server = http.createServer(app);
-const io = require('socket.io')(server);
+const io = require('socket.io')(server, {
+    cors: {
+        origin: "http://localhost:3000", // allows frontend to connect
+        methods: ["GET", "POST"],
+    },
+});
 
 // connect to MongoDB using function from db.js
 connectDB();

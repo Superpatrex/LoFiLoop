@@ -15,7 +15,13 @@
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: aliceblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url('/Background.png'); /* Correct path */
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: white;
 }

@@ -5,9 +5,14 @@ const app = express();
 const path = require("path");
 const port = process.env.PORT || 3001;
 const { generateSongInfo } = require('./openai');
+const openaiRoutes = require("./routes/openaiRoutes");
+const listenersRoutes = require("./routes/listenersRoutes");
+const { connectDB } = require("./db");
+const setupWebSocket = require("./websocket");
+const http = require("http");
+
+const cors = require("cors");
 const messageRoutes = require("./routes/messageRoute");
-const connectDB = require("./db"); // imports database connection
-const http = require('http'); // to create the HTTP server for Socket.io
 const songRequestRoutes = require('./utils/songRequests');
 
 // middleware
@@ -38,9 +43,9 @@ app.post('/generate', async (req, res) => {
   res.json(result); // return JSON response
 })
 
-// app.listen(port, () => {
-//   console.log(`Server is running on port ${port}`);
-// });
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
 
 function sendEmail(email) { //use nodemailer to send email
     return new Promise((resolve, reject) => {
@@ -84,27 +89,14 @@ app.use(express.static(path.join(__dirname, "build"))); //connects the react fro
 
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "build", "index.html"));
-});
-
-// Socket.io event handling
-io.on('connection', (socket) => {
-    console.log('A user connected');
-  
-    // you can now listen to specific events like message sending or song requests
-    socket.on('sendMessage', (message) => {
-      // emit the message to all connected clients (broadcast)
-      io.emit('receiveMessage', message);
     });
-  
-    socket.on('disconnect', () => {
-      console.log('User disconnected');
-    });
-  });
-
+   
 //starts the express server
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`)
 });
+
+
 
 /*
 const express = require("express");

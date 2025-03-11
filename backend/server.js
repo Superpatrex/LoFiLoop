@@ -1,27 +1,43 @@
 const express = require('express');
-const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 const app = express();
 const path = require("path");
 const port = process.env.PORT || 3001;
-const { generateSongInfo } = require('./openai');
 const openaiRoutes = require("./routes/openaiRoutes");
 const listenersRoutes = require("./routes/listenersRoutes");
 const { connectDB } = require("./db");
 const setupWebSocket = require("./websocket");
 const http = require("http");
-
 const cors = require("cors");
+const { generateSongText } = require('./models/openai');
 const messageRoutes = require("./routes/messageRoute");
 const songRequestRoutes = require('./utils/songRequests');
 
-// middleware
 app.use(express.json());
-const cors = require("cors");
-app.use(cors({ origin: "http://localhost:3000" }));
+
+connectDB();
+app.use(cors());
+app.use(express.json()); // Middleware to parse JSON
+
+// Routes--------------------------------------------------------------
+
+app.use("/listeners", listenersRoutes);
+app.use("/openai", openaiRoutes);
+app.use("/api/message", messageRoutes);
+// new endpoint for ChatGPT
+app.post('/generate', async (req, res) => {
+  const { prompt } = req.body;
+  
+  const result = await generateSongText(prompt);
+  res.json(result); // return JSON response
+})
+
+// Websocket ------------------------------------------------------
+
+const server = http.createServer(app);
+setupWebSocket(server);
 
 // set up the HTTP server and integrate Socket.io
-const server = http.createServer(app);
 const io = require('socket.io')(server, {
     cors: {
         origin: "http://localhost:3000", // allows frontend to connect
@@ -29,23 +45,9 @@ const io = require('socket.io')(server, {
     },
 });
 
-// connect to MongoDB using function from db.js
-connectDB();
+// ---------------------------------------------------------------
 
-// message API routes
-app.use("/api/message", messageRoutes);
 
-// new endpoint for ChatGPT
-app.post('/generate', async (req, res) => {
-  const { prompt } = req.body;
-  
-  const result = await generateSongInfo(prompt);
-  res.json(result); // return JSON response
-})
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
 
 function sendEmail(email) { //use nodemailer to send email
     return new Promise((resolve, reject) => {
@@ -87,14 +89,14 @@ app.post("/send-password-reset", async (req, res) => { //recieves react post req
 
 app.use(express.static(path.join(__dirname, "build"))); //connects the react frontend
 
+
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "build", "index.html"));
     });
    
-//starts the express server
-app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`)
-});
+server.listen(port, "0.0.0.0", () => {
+    console.log(`✅ Server running on http://localhost:${port}`);
+    });
 
 
 

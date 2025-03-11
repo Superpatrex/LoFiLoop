@@ -1,4 +1,4 @@
-const { generateSongInfo } = require('./openai');
+const { generateSongText } = require('./openai');
 const SongQueue = require('./models/songQueue'); // import the SongQueue model
 
 module.exports = (io) => {
@@ -9,7 +9,7 @@ module.exports = (io) => {
     socket.on('requestSong', async (songRequest, user) => {
       try {
         // generate song info (title and artist)
-        const songInfo = await generateSongInfo(songRequest);
+        const songInfo = await generateSongText(songRequest);
 
         // create a new SongQueue entry and save it to the database
         const newSong = new SongQueue({

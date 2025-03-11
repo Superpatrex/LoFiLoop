@@ -2,7 +2,7 @@
 // includes: /request <song request> (adds track to queue based off <song request>)
 //           /queue (returns a list of the queued requests and the user who requested it)
 //           /mood (returns an AI summary of the mood of the past 10 songs + queued songs)
-const { generateSongInfo } = require("../openai");
+const { generateSongText } = require("../models/openai");
 // stores song requests
 const SongQueue = require("../models/SongQueue");
 
@@ -21,9 +21,9 @@ async function handleRequest(songRequest, senderId, username) {
         return { error: "Invalid request format. Use /request <song name>." };
     }
 
-    const openAIResponse = await generateSongInfo(song);
+    const openAIResponse = await generateSongText(song);
 
-    // parse the OpenAI response from generateSongInfo
+    // parse the OpenAI response from generateSongText
     console.log("OpenAI Response: ", openAIResponse);
 
     if (!openAIResponse) {

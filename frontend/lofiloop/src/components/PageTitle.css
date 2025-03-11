@@ -1,0 +1,17 @@
+body {
+    background: rgb(0,0,0);
+    background: linear-gradient(34deg, rgba(0,0,0,1) 0%, rgba(39,44,76,1) 31%, rgba(78,49,77,1) 45%);
+    height: 100vh;
+}
+
+.page-title {
+    text-align: left;
+    padding-left: 20px;
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif; 
+    font-size: 24px; 
+    font-style: normal; 
+    font-variant: normal; 
+    font-weight: 700; 
+    line-height: 26.4px;
+    color: white;
+}

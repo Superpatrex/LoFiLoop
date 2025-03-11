@@ -1,10 +1,35 @@
-const express = require("express");
+const express = require('express');
 const nodemailer = require("nodemailer");
-const port = 3003;
 const app = express();
 const path = require("path");
+const port = process.env.PORT || 3001;
+const openaiRoutes = require("./routes/openaiRoutes");
+const listenersRoutes = require("./routes/listenersRoutes");
+const { connectDB } = require("./db");
+const setupWebSocket = require("./websocket");
+const http = require("http");
+
+const cors = require("cors");
 
 app.use(express.json());
+
+connectDB();
+app.use(cors());
+app.use(express.json()); // Middleware to parse JSON
+
+// Routes--------------------------------------------------------------
+
+app.use("/listeners", listenersRoutes);
+app.use("/openai", openaiRoutes);
+
+// Websocket ------------------------------------------------------
+
+const server = http.createServer(app);
+setupWebSocket(server);
+
+// ---------------------------------------------------------------
+
+
 
 function sendEmail(email) { //use nodemailer to send email
     return new Promise((resolve, reject) => {
@@ -51,10 +76,9 @@ app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "build", "index.html"));
     });
    
-//starts the express server
-app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`)
-});
+server.listen(port, "0.0.0.0", () => {
+    console.log(`✅ Server running on http://localhost:${port}`);
+    });
 
 
 

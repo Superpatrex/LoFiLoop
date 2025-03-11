@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 
+
 export default function Chat() {
   const [messages, setMessages] = useState([
     { id: 1, text: "Hey, how’s the music?", sender: "user" },
@@ -12,6 +13,7 @@ export default function Chat() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [songTitle, setSongTitle] = useState("Loading...");
+  const [volume, setVolume] = useState(0.5);
   const audioRef = useRef(null);
 
   const formatTime = (seconds) => {
@@ -21,6 +23,12 @@ export default function Chat() {
   };
 
   useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+  }, [volume]);
+
+    useEffect(() => {
     if (audioRef.current) {
       const audioSrc = audioRef.current.src;
       const fileName = audioSrc.substring(audioSrc.lastIndexOf("/") + 1).replace(".mp3", "");
@@ -82,12 +90,24 @@ export default function Chat() {
                 <div className="w-40 h-40 bg-gray-500 rounded-full"></div>
               </div>
             </div>
-            <h2 className="text-white text-3xl font-bold">{songTitle}</h2>
-            <p className="text-gray-400 text-lg">AI-generated Lofi Music</p>
+            <h2 className="text-white text-3xl font-bold mb-0">{songTitle}</h2>
+            <p className="text-gray-400 text-lg leading-tight mt-0">AI-generated Lofi Music</p>
 
             <audio ref={audioRef} src="lukrembo_biscuit.mp3" />
 
-            <div className="w-2/3 mt-4 flex flex-col items-center space-y-2">
+            <div className="w-2/3 mt-4 flex flex-col space-y-2">
+              <div className="flex items-center w-full space-x-3">
+                <span className="text-white">🔊</span>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  value={volume}
+                  onChange={(e) => setVolume(parseFloat(e.target.value))}
+                  className="w-24"
+                />
+              </div>
               <div className="w-full h-3 bg-gray-600 rounded-full relative">
                 <div className="absolute top-0 h-full bg-white rounded-full" style={{ width: `${progress}%` }}></div>
               </div>

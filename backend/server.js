@@ -1,52 +1,37 @@
-require("dotenv").config();
 const express = require('express');
-const cors = require('cors'); // Import the cors middleware
-const mongoose = require("mongoose");
-//const path = require("path");
-const authRoutes = require("./routes/authRoutes");
-
+const nodemailer = require("nodemailer");
 const app = express();
+const path = require("path");
 const port = process.env.PORT || 3001;
+const openaiRoutes = require("./routes/openaiRoutes");
+const listenersRoutes = require("./routes/listenersRoutes");
+const { connectDB } = require("./db");
+const setupWebSocket = require("./websocket");
+const http = require("http");
 
-app.use(cors({ origin: "http://localhost:3000" })); // CORS middleware with options
+const cors = require("cors");
+
 app.use(express.json());
-app.use("/routes", authRoutes);
 
-// Database connection using MONGO_URI
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("Connected to MongoDB"))
-    .catch(console.error);
+connectDB();
+app.use(cors());
+app.use(express.json()); // Middleware to parse JSON
 
-// app.get("*", (req, res) => {
-//     res.sendFile(path.join(__dirname, "build", "index.html"));
-// });
+// Routes--------------------------------------------------------------
 
-// app.use(express.static(path.join(__dirname, "build"))); // Connects the react frontend
+app.use("/listeners", listenersRoutes);
+app.use("/openai", openaiRoutes);
 
-// Starts the express server
-app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`)
-});
+// Websocket ------------------------------------------------------
 
-// // New endpoint for generating song text
-// app.post('/generateAlbumText', async (req, res) => {
-//   const { prompt } = req.body;
-  
-//   const result = await generateSongText(prompt);
-//   res.json(result); // Return JSON response
-// })
+const server = http.createServer(app);
+setupWebSocket(server);
 
-// // New endpoint for generating album art
-// app.post('/generateAlbumArt', async (req, res) => {
-//     const { prompt } = req.body;
-    
-//     const result = await generateAlbumArt(prompt);
-//     res.json(result); // Return JSON response
-// })
+// ---------------------------------------------------------------
 
-// Remove email-related code for now
-/*
-function sendEmail(email) { 
+
+
+function sendEmail(email) { //use nodemailer to send email
     return new Promise((resolve, reject) => {
         var transporter = nodemailer.createTransport({
             service: "gmail",
@@ -72,18 +57,96 @@ function sendEmail(email) {
         });
     })
 }
-*/
 
-// Remove the /send-password-reset endpoint for now
-/*
-app.post("/send-password-reset", async (req, res) => { 
+app.post("/send-password-reset", async (req, res) => { //recieves react post request
     const {email} = req.body;
     try {
-        const response = await sendEmail(email); 
+        const response = await sendEmail(email); //send email, response is retunred by the promise
         console.log(response.message);
         res.json(response); //send response to front end
     } catch (error) {
         res.status(500).json(error);
     }
 })
+
+app.use(express.static(path.join(__dirname, "build"))); //connects the react frontend
+
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "build", "index.html"));
+    });
+   
+server.listen(port, "0.0.0.0", () => {
+    console.log(`✅ Server running on http://localhost:${port}`);
+    });
+
+
+
+/*
+const express = require("express");
+const nodemailer = require("nodemailer");
+const cors = require("cors");
+const port = 3001;
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+function sendEmail(email) {
+    return new Promise((resolve, reject) => {
+        var transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: "zhao.annat@gmail.com",
+                pass: "tqmf olru gdkw veop"
+            }
+        })
+
+        const mail = {
+            from:"zhao.annat@gmail.com",
+            to: email,
+            subject: "Reset Your LoFi Loop Password",
+            text: "reset your password"
+        }
+
+        transporter.sendMail(mail, function(error, info){
+            if (error) {
+                console.log(error);
+                return reject({message:"error"});
+            }
+            return resolve({message:"success"});
+        });
+        
+    })
+
+}
+
+app.post("/send-password-reset", (req, res) => {
+    const {email} = req.body;
+
+    if (!email) {
+        return res.status(400).json({message: "Email required"});
+    }
+
+    sendEmail(email).then((response) => res.json(response.message)).catch((error) => res.status(500).json({message: error.message}));
+    });
+    
+app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`)
+});
+-------------- 
+
+const express = require('express');
+const app = express();
+const port = process.env.PORT;
+
+app.use(express.json());
+
+app.get('/', (req, res) => {
+  res.send( 'OMG JACK IS SOOOOO COOL AND FUNNY!!!!' );
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
 */

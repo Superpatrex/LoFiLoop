@@ -1,0 +1,61 @@
+.aboutContainer {
+    display: flex;
+    width: 80%;
+    max-width: 1200px;
+    margin: 20px auto; /* Center the container */
+    background-color: #272c4c;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.aboutText {
+    flex: 1;
+    padding: 20px;
+    margin-right: 20px;
+}
+
+.aboutText h2 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.aboutText p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.teamList {
+    flex: 1;
+    padding: 20px;
+}
+
+.teamList h2 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.teamList ul {
+    list-style: none;
+    padding: 0;
+}
+
+.teamMember {
+    padding: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    border-radius: 4px;
+}
+
+.teamMember:hover {
+    transform: scale(1.05);
+    background-color: #e0e0e0;
+}
+
+.projectManager {
+    font-size: 0.8em;
+    color: #555;
+    display: block;
+    margin-top: 5px;
+}

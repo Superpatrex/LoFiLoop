@@ -11,7 +11,7 @@ const ForgotPassword = () => {
         event.preventDefault();
 
         try {
-            const response = await fetch("/send-password-reset", { //send post request to backend
+            const response = await fetch("http://localhost:3001/send-password-reset", { //send post request to backend
                 method: "POST",
                 headers: { "Content-Type": "application/json",},
                 body: JSON.stringify({ email }), //body contains the email address

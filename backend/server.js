@@ -8,8 +8,10 @@ const listenersRoutes = require("./routes/listenersRoutes");
 const { connectDB } = require("./db");
 const setupWebSocket = require("./websocket");
 const http = require("http");
-
 const cors = require("cors");
+const { generateSongText } = require('./models/openai');
+const messageRoutes = require("./routes/messageRoute");
+const songRequestRoutes = require('./utils/songRequests');
 
 app.use(express.json());
 
@@ -21,11 +23,27 @@ app.use(express.json()); // Middleware to parse JSON
 
 app.use("/listeners", listenersRoutes);
 app.use("/openai", openaiRoutes);
+app.use("/api/message", messageRoutes);
+// new endpoint for ChatGPT
+app.post('/generate', async (req, res) => {
+  const { prompt } = req.body;
+  
+  const result = await generateSongText(prompt);
+  res.json(result); // return JSON response
+})
 
 // Websocket ------------------------------------------------------
 
 const server = http.createServer(app);
 setupWebSocket(server);
+
+// set up the HTTP server and integrate Socket.io
+const io = require('socket.io')(server, {
+    cors: {
+        origin: "http://localhost:3000", // allows frontend to connect
+        methods: ["GET", "POST"],
+    },
+});
 
 // ---------------------------------------------------------------
 

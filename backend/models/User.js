@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const { getDatabase } = require("../db");
+
 
 const userDB = getDatabase("test");
 

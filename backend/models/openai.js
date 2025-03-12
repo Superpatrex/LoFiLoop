@@ -24,6 +24,7 @@ async function generateSongText(prompt) {
         return structuredData; // JSON --> JS object
     } catch (error) {
         console.error("Error calling OpenAI API", error);
+        return null;
     }
 }
 

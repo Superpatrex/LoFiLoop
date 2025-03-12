@@ -1,61 +1,84 @@
 .aboutContainer {
-    display: flex;
-    width: 80%;
-    max-width: 1200px;
-    margin: 20px auto; /* Center the container */
-    background-color: #272c4c;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    border: 2px solid #ccc;
+    border-radius: 25px;
     padding: 20px;
+    width: 80%;
+    max-width: 800px;
+    background-color: #272c4c;
+    box-shadow: 5px 5px 5px #252337;
 }
 
 .aboutText {
-    flex: 1;
     padding: 20px;
-    margin-right: 20px;
 }
 
 .aboutText h2 {
-    color: #333;
+    color: white;
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    font-size: 22px;
+    font-weight: 700;
     margin-bottom: 15px;
+    text-align: center;
 }
 
 .aboutText p {
-    color: #555;
+    color: white;
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    font-size: 15px;
     line-height: 1.6;
     margin-bottom: 15px;
+    text-align: center; /* Center the paragraph text */
 }
 
 .teamList {
-    flex: 1;
     padding: 20px;
 }
 
 .teamList h2 {
-    color: #333;
+    color: white;
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    font-size: 22px;
+    font-weight: 700;
     margin-bottom: 15px;
+    text-align: center;
 }
 
 .teamList ul {
     list-style: none;
     padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 10px;
 }
 
 .teamMember {
     padding: 10px;
     cursor: pointer;
-    transition: transform 0.3s ease, background-color 0.3s ease;
+    transition: transform 0.3s ease;
     border-radius: 4px;
+    color: white;
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    font-size: 15px;
+    text-align: center;
 }
 
 .teamMember:hover {
     transform: scale(1.05);
-    background-color: #e0e0e0;
+    text-shadow: 0 0 10px #848aab; /* Glow effect */
 }
 
 .projectManager {
     font-size: 0.8em;
-    color: #555;
+    color: #ccc;
+    display: block;
+    margin-top: 5px;
+}
+
+.developerRole {
+    font-size: 0.8em;
+    color: #ccc;
     display: block;
     margin-top: 5px;
 }

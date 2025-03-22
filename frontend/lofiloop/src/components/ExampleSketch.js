@@ -1,6 +1,7 @@
 "use client";
 // Example usage in a Next.js page:
 // pages/p5-example.js
+import React, { useRef, useEffect } from "react";
 
 import dynamic from "next/dynamic";
 import p5 from "p5";
@@ -29,13 +30,6 @@ const ExampleSketch = () => {
             canvas.elt.style.position = 'static'; // Add this line to help with cleanup
         };
 
-        // Add a remove function for cleanup
-        // p.remove = () => {
-        //     song.stop();
-        //     canvas.remove();
-        // };
-
-
         p.mouseClicked = () => {
             if (song.isPlaying()) {
                 song.pause();
@@ -49,9 +43,6 @@ const ExampleSketch = () => {
 
         // P5.js draw loop
         p.draw = () => {
-            // p.ellipse(p.mouseX, p.mouseY, 20, 20);
-            // p.fill(255, 0, 0);
-
             const lavender = p.color(172, 143, 227);
             p.background(lavender);
 
@@ -145,10 +136,9 @@ const ExampleSketch = () => {
     };
 
     return (
-        <div>
-            <h1>P5.js Example</h1>
+        // <div>
             <P5Wrapper sketch={sketch} />
-        </div>
+        // </div>
     );
 };
 

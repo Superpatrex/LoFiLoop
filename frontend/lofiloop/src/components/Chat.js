@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import Waveform from "./Waveform";
 
 
 export default function Chat() {
@@ -55,11 +56,11 @@ export default function Chat() {
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    
+
     const updateProgress = () => {
       setProgress((audio.currentTime / audio.duration) * 100);
     };
-    
+
     audio.addEventListener("timeupdate", updateProgress);
     return () => audio.removeEventListener("timeupdate", updateProgress);
   }, []);
@@ -85,7 +86,10 @@ export default function Chat() {
           </div>
 
           <div className="mt-10 flex flex-col items-center space-y-6">
-            <div className="relative w-56 h-56 rounded-full bg-gray-600 flex items-center justify-center shadow-xl">
+            <div className="relative w-96 h-96 rounded-full flex items-center justify-center">
+                <div className="absolute inset-0">
+                    <Waveform className="w-full h-full" />
+                </div>
               <div className="absolute inset-0 flex justify-center items-center">
                 <div className="w-40 h-40 bg-gray-500 rounded-full"></div>
               </div>

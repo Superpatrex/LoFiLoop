@@ -1,14 +1,24 @@
-.NavBar {
+nav {
     background-color: #272c4c;
     padding: 10px 20px;
     box-shadow: 0 4px 2px -2px #252337;
-    margin-bottom: 25px;
     border-radius: 25px;
     border: 1.5px solid #ccc;
-    
+
+    position: fixed; /* Make the navbar fixed at the top */
+    top: 50px; /* Align it to the top of the page */
+    left: 0;
+    width: 100%; /* Make it span the full width of the page */
+    z-index: 1000; /* Ensure it stays above other elements */
+    margin: 0; /* Remove the bottom margin to avoid spacing issues */
 }
 
-.NavBar ul {
+body {
+    margin: 0; /* Remove default margin */
+    padding-top: 70px; /* Add padding to prevent content from being hidden under the navbar */
+}
+
+nav ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -16,11 +26,11 @@
     justify-content: space-around;
 }
 
-.NavBar li {
+nav li {
     display: inline;
 }
 
-.NavBar a {
+nav a {
     color: white;
     text-decoration: none;
     font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
@@ -28,6 +38,6 @@
     font-weight: bold;
 }
 
-.NavBar a:hover {
+nav a:hover {
     color: #848aab;
 }

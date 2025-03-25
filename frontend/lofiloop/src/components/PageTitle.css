@@ -14,4 +14,10 @@ body {
     font-weight: 700; 
     line-height: 26.4px;
     color: white;
+    position: absolute; /* Position it relative to the page */
+    top: 10px; /* Distance from the top of the page */
+    left: 10px; /* Distance from the left of the page */
+    font-size: 24px; /* Adjust font size */
+    font-weight: bold; /* Make it bold */
+    z-index: 1001; /* Ensure it appears above other elements */
 }

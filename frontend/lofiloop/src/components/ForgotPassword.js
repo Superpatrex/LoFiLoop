@@ -1,7 +1,7 @@
 "use client";
 
 import React, {useState} from 'react';
-import './ForgotPasswordCSS.css';
+import './ForgotPassword.css';
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");

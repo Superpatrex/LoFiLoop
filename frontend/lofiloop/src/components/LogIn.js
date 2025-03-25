@@ -1,5 +1,7 @@
+"use client";
+
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import './LogIn.css';
 
 const LogIn = () => {
@@ -62,10 +64,10 @@ const LogIn = () => {
                 <button type="submit">Login</button>
             </form>
             <p>
-                Haven't signed up yet? <Link to="/signup">Click here</Link>
+                Haven't signed up yet? <Link href="/signup">Click here</Link>
             </p>
             <p>
-                Forgot your password? <Link to="/forgot-password">Click here</Link>
+                Forgot your password? <Link href="/forgot-password">Click here</Link>
             </p>
         </div>
     );

@@ -1,23 +1,23 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from "next/link";
 import './NavBar.css';
 
-const NavBar = () => {
-    return (
-        <nav className="NavBar">
-            <ul>
-                <li>
-                    <Link to="/home">Home</Link>
-                </li>
-                <li>
-                    <Link to="/auth">LogIn/SignUp</Link>
-                </li>
-                <li>
-                    <Link to="/about">About Us</Link>
-                </li>
-            </ul>
-        </nav>
-    );
-};
-
-export default NavBar;
+export default function NavBar() {
+  return (
+    <nav>
+      <ul>
+        <li>
+          <Link href="/">Home</Link>
+        </li>
+        <li>
+          <Link href="/signup">Sign Up</Link>
+        </li>
+        <li>
+          <Link href="/login">Log In</Link>
+        </li>
+        <li>
+          <Link href="/">About Us</Link>
+        </li>
+      </ul>
+    </nav>
+  );
+}

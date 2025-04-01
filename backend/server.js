@@ -61,8 +61,15 @@ function sendEmail(email) { //use nodemailer to send email
             from:"zhao.annat@gmail.com",
             to: email,
             subject: "Reset Your LoFi Loop Password",
-            text: "Click this link to reset your password! \n Happy listening!"
-        }
+            html: `
+            <html>
+              <body>
+                <p>Click this link to reset your password:</p>
+                <a href="https://www.google.com/webhp?hl=en&sa=X&ved=0ahUKEwiR2IHs67WMAxU1QjABHSrnCjoQPAgI" target="_blank">Reset Password</a>
+                <p>Happy listening!</p>
+              </body>
+            </html>`
+        };
 
         transporter.sendMail(mail, function(error, info){
             if (error) {

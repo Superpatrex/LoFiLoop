@@ -10,6 +10,7 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState([]);
+    const [message, setMessage] = useState("");
 
     const validateEmail = (email) => {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -19,27 +20,48 @@ const SignUp = () => {
         return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])[A-Za-z\d!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]{8,}$/.test(password);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
-        let validationErrors = [];
 
+        //check for validation errors first
+        let validationErrors = [];
+        
         if (!validateEmail(email)) {
             validationErrors.push('Invalid email format.');
         }
-
         if (!validatePassword(password)) {
             validationErrors.push('Password must be at least 8 characters long and include an uppercase letter, lowercase letter, a number, and a special character.');
         }
-
         if (password !== confirmPassword) {
             validationErrors.push('Passwords do not match.');
         }
-
         setErrors(validationErrors);
 
-        if (validationErrors.length === 0) {
-            alert('Sign-up successful!');
+        if (validationErrors.length > 0) {   //if error, don't send email
+            return;
         }
+
+        try {
+            const response = await fetch("http://localhost:3001/send-confirmation", { //send post request to backend
+                method: "POST",
+                headers: { "Content-Type": "application/json",},
+                body: JSON.stringify({ email }), //body contains the email address                
+            });
+                    
+            const data = await response.json(); //get response from backend
+            console.log(data);
+            setMessage(data.message);
+    
+            if (data.message == "success") {
+                    alert("Sign up successful, confirmation email sent")
+                    setEmail("");
+                    setMessage("");
+            }
+        } catch (error) {
+            setMessage("Failed");
+            console.error(error);
+        }
+        
     };
 
     return (

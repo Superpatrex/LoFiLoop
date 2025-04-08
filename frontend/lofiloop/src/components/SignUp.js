@@ -9,6 +9,7 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState([]);
+    const [message, setMessage] = useState("");
 
     const validateEmail = (email) => {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -20,20 +21,19 @@ const SignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let validationErrors = [];
 
+        //check for validation errors first
+        let validationErrors = [];
+        
         if (!validateEmail(email)) {
             validationErrors.push('Invalid email format.');
         }
-
         if (!validatePassword(password)) {
             validationErrors.push('Password must be at least 8 characters long and include an uppercase letter, lowercase letter, a number, and a special character.');
         }
-
         if (password !== confirmPassword) {
             validationErrors.push('Passwords do not match.');
         }
-
         setErrors(validationErrors);
 
         //connecting the backend!

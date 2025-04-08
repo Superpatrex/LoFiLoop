@@ -1,7 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 
-
 export default function Chat() {
   const [messages, setMessages] = useState([
     { id: 1, text: "Hey, how’s the music?", sender: "user" },
@@ -10,10 +9,10 @@ export default function Chat() {
     { id: 4, text: "Try 'Lofi Dreams' by Chill Beats.", sender: "bot" },
   ]);
   const [input, setInput] = useState("");
-  const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [songTitle, setSongTitle] = useState("Loading...");
   const [volume, setVolume] = useState(0.5);
+  const [isPlaying, setIsPlaying] = useState(true);
   const audioRef = useRef(null);
 
   const formatTime = (seconds) => {
@@ -28,7 +27,7 @@ export default function Chat() {
     }
   }, [volume]);
 
-    useEffect(() => {
+  useEffect(() => {
     if (audioRef.current) {
       const audioSrc = audioRef.current.src;
       const fileName = audioSrc.substring(audioSrc.lastIndexOf("/") + 1).replace(".mp3", "");
@@ -55,11 +54,11 @@ export default function Chat() {
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    
+
     const updateProgress = () => {
       setProgress((audio.currentTime / audio.duration) * 100);
     };
-    
+
     audio.addEventListener("timeupdate", updateProgress);
     return () => audio.removeEventListener("timeupdate", updateProgress);
   }, []);
@@ -79,10 +78,20 @@ export default function Chat() {
       </div>
 
       <div className="flex flex-grow w-full">
-        <div className="flex flex-col justify-center w-2/3 p-8">
-          <div className="mt-2 bg-gray-800 text-white px-4 py-2 rounded-full w-fit">
+        <div className="flex flex-col justify-center w-2/3 p-8 relative">
+          {/* Top-left Live Listeners Badge */}
+          <div className="absolute top-10 left-4 bg-gray-800 text-white px-4 py-2 rounded-full w-fit shadow">
             <span className="font-bold">36</span> listeners
           </div>
+
+          {/* Top-right Download Button */}
+          <a
+            href="lukrembo_biscuit.mp3"
+            download
+            className="absolute top-10 right-4 bg-gray-700 text-white px-4 py-2 rounded-full text-sm shadow hover:bg-gray-600 transition"
+          >
+            Download MP3
+          </a>
 
           <div className="mt-10 flex flex-col items-center space-y-6">
             <div className="relative w-56 h-56 rounded-full bg-gray-600 flex items-center justify-center shadow-xl">
@@ -93,11 +102,11 @@ export default function Chat() {
             <h2 className="text-white text-3xl font-bold mb-0">{songTitle}</h2>
             <p className="text-gray-400 text-lg leading-tight mt-0">AI-generated Lofi Music</p>
 
-            <audio ref={audioRef} src="lukrembo_biscuit.mp3" />
+            <audio ref={audioRef} src="lukrembo_biscuit.mp3" autoPlay loop />
 
             <div className="w-2/3 mt-4 flex flex-col space-y-2">
               <div className="flex items-center w-full space-x-3">
-                <span className="text-white">🔊</span>
+                <span className="text-white">ᯤ</span>
                 <input
                   type="range"
                   min="0"
@@ -117,15 +126,13 @@ export default function Chat() {
               </div>
             </div>
 
-            <div className="flex space-x-6 mt-4">
-              <button className="text-white bg-gray-700 p-4 rounded-full text-lg shadow-md">⏮</button>
+            <div className="mt-4">
               <button
-                className="text-white bg-gray-700 p-5 rounded-full text-lg shadow-md"
                 onClick={togglePlayPause}
+                className="text-white bg-gray-700 px-6 py-3 rounded-full text-base font-medium shadow-md hover:bg-gray-600 transition"
               >
-                {isPlaying ? "⏸" : "▶"}
+                {isPlaying ? "▐▐ Pause" : "▶ Play"}
               </button>
-              <button className="text-white bg-gray-700 p-4 rounded-full text-lg shadow-md">⏭</button>
             </div>
           </div>
         </div>

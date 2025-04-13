@@ -1,17 +1,20 @@
 body {
-    background: rgb(0,0,0);
-    background: linear-gradient(34deg, rgba(0,0,0,1) 0%, rgba(39,44,76,1) 31%, rgba(78,49,77,1) 45%);
+    background: rgb(0, 0, 0);
+    background: linear-gradient(34deg, rgba(0, 0, 0, 1) 0%, rgba(39, 44, 76, 1) 31%, rgba(78, 49, 77, 1) 45%);
     height: 100vh;
+    margin: 0;
+    padding: 0;
 }
 
-.page-title {
-    text-align: left;
+.page-logo {
+    display: block;
     padding-left: 20px;
-    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif; 
-    font-size: 24px; 
-    font-style: normal; 
-    font-variant: normal; 
-    font-weight: 700; 
-    line-height: 26.4px;
-    color: white;
+    padding-top: 20px;
+    width: 180px;
+    height: auto;
+    transition: transform 0.3s ease; 
+}
+
+.page-logo:hover {
+    transform: scale(1.1);
 }

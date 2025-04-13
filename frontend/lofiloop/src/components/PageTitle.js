@@ -4,9 +4,10 @@ import './PageTitle.css';
 const PageTitle = () => {
     return (
         <div>
-            <h1 className="page-title">LofiLoop</h1>
+            <img src="/lofi_loop_logo.png" alt="Lofi Loop Logo" className="page-logo" />
         </div>
     );
 };
 
 export default PageTitle;
+

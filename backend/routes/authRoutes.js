@@ -2,7 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-const sendEmail = require("../utils/sendEmail");
+const sendSignUpEmail = require("../utils/sendEmail");
 require("dotenv").config();
 
 const router = express.Router();
@@ -12,39 +12,25 @@ router.post("/register", async (req, res) => {
     const { username, email, password } = req.body;
 
     try {
-        let user = await User.findOne({ email });
+        let user = await User.findOne({ email }); //check if user exists
         console.log("Log 1");
 
         if (user) return res.status(400).json({ message: "Email already exists" });
 
         console.log("Log 2");
 
-        user = new User({ username, email, password });
+        user = new User({ username, email, password }); //create new user
         await user.save();
 
         console.log("Log 3");
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
         console.log("Log 4");
-        const response = await sendEmail(email, "Verify Your Email", `Click here to verify: http://localhost:3001/auth/verify/${token}`);
+        const response = await sendSignUpEmail(email);
         console.log(response);
         console.log("Log 5");
         res.status(201).json({ message: "User registered. Verify your email." });
     } catch (error) {
         res.status(500).json({ message: "Server error " + error });
-    }
-});
-// Email Verification
-router.get("/verify/:token", async (req, res) => {
-    try {
-        const decoded = jwt.verify(req.params.token, process.env.JWT_SECRET);
-        const user = await User.findById(decoded.id);
-        if (!user) return res.status(400).json({ message: "Invalid token" });
-
-        user.isVerified = true;
-        await user.save();
-        res.json({ message: "Email verified successfully!" });
-    } catch (error) {
-        res.status(400).json({ message: "Invalid token" });
     }
 });
 

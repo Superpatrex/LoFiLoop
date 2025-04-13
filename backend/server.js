@@ -1,5 +1,6 @@
 const express = require('express');
 const nodemailer = require("nodemailer");
+//const sendSignUpEmail = require('./sendEmail')
 const app = express();
 const path = require("path");
 const port = process.env.PORT || 3001;
@@ -12,6 +13,8 @@ const cors = require("cors");
 const { generateSongText } = require('./models/openai');
 const messageRoutes = require("./routes/messageRoute");
 const songRequestRoutes = require('./utils/songRequests');
+const authRoutes = require("./routes/authRoutes");
+require("dotenv").config();
 
 connectDB();
 app.use(cors());
@@ -22,6 +25,7 @@ app.use(express.json()); // Middleware to parse JSON
 app.use("/listeners", listenersRoutes);
 app.use("/openai", openaiRoutes);
 app.use("/api/message", messageRoutes);
+app.use("/auth", authRoutes);
 // new endpoint for ChatGPT
 app.post('/generate', async (req, res) => {
   const { prompt } = req.body;
@@ -45,7 +49,7 @@ const io = require('socket.io')(server, {
 
 // ---------------------------------------------------------------
 
-
+//reset password email
 
 function sendEmail(email) { //use nodemailer to send email
     return new Promise((resolve, reject) => {
@@ -92,47 +96,6 @@ app.post("/send-password-reset", async (req, res) => { //recieves react post req
     }
 })
 
-
-//////// sign up email
-
-
-function sendSignUpEmail(email) { //use nodemailer to send email
-    return new Promise((resolve, reject) => {
-        var transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-                user: "zhao.annat@gmail.com",
-                pass: "tqmfolrugdkwveop"
-            }
-        })
-
-        const mail = {
-            from:"zhao.annat@gmail.com",
-            to: email,
-            subject: "LoFi Loop Sign Up Confirmation",
-            text: "Thank you for signing up for LoFi Loop! Your account has been successfully created. \n Happy listening!"
-        }
-
-        transporter.sendMail(mail, function(error, info){
-            if (error) {
-                console.log(error);
-                reject({message:"error"});
-            }
-            resolve({message:"success"});
-        });
-    })
-}
-
-app.post("/send-confirmation", async (req, res) => { //recieves react post request
-    const {email} = req.body;
-    try {
-        const response = await sendSignUpEmail(email); //send email, response is returned by the promise
-        console.log(response.message);
-        res.json(response); //send response to front end
-    } catch (error) {
-        res.status(500).json(error);
-    }
-})
 
 app.use(express.static(path.join(__dirname, "build"))); //connects the react frontend
 

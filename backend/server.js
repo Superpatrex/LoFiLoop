@@ -12,6 +12,7 @@ const cors = require("cors");
 const { generateSongText } = require('./models/openai');
 const messageRoutes = require("./routes/messageRoute");
 const songRequestRoutes = require('./utils/songRequests');
+const authRoutes = require("./routes/authRoutes");
 
 connectDB();
 app.use(cors());
@@ -22,6 +23,7 @@ app.use(express.json()); // Middleware to parse JSON
 app.use("/listeners", listenersRoutes);
 app.use("/openai", openaiRoutes);
 app.use("/api/message", messageRoutes);
+app.use("/api/auth", authRoutes);
 // new endpoint for ChatGPT
 app.post('/generate', async (req, res) => {
   const { prompt } = req.body;

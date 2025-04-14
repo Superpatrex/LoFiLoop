@@ -3,18 +3,72 @@ import { useState, useRef, useEffect } from "react";
 
 
 export default function Chat() {
-  const [messages, setMessages] = useState([
-    { id: 1, text: "Hey, how’s the music?", sender: "user" },
-    { id: 2, text: "Lofi vibes are perfect!", sender: "bot" },
-    { id: 3, text: "Nice, any recommendations?", sender: "user" },
-    { id: 4, text: "Try 'Lofi Dreams' by Chill Beats.", sender: "bot" },
-  ]);
+  // const [messages, setMessages] = useState([
+  //   { id: 1, text: "Hey, how’s the music?", sender: "user" },
+  //   { id: 2, text: "Lofi vibes are perfect!", sender: "bot" },
+  //   { id: 3, text: "Nice, any recommendations?", sender: "user" },
+  //   { id: 4, text: "Try 'Lofi Dreams' by Chill Beats.", sender: "bot" },
+  // ]);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [songTitle, setSongTitle] = useState("Loading...");
   const [volume, setVolume] = useState(0.5);
   const audioRef = useRef(null);
+  const messagesEndRef = useRef(null);
+
+  const currentUserId = "67be4b0a706d6b50fd8ad65a";
+
+  // fetch messages from MongoDB
+  useEffect (() => {
+    const fetchMessages = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/message/messages");
+        const data = await response.json();
+        setMessages(data.reverse());
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
+    };
+
+    fetchMessages();
+  }, []);
+
+  // send new message
+  const sendMessage = async () => {
+    if (input.trim() === "") return;
+
+    const newMessage = { senderId: currentUserId, text: input};
+
+    try {
+      const response = await fetch("http://localhost:3001/api/message/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newMessage),
+      });
+
+      const responseText = await response.text(); // Get the raw response body
+
+      console.log("Response Status:", response.status);
+      console.log("Response Text:", responseText); // Log raw response
+      
+
+      if (!response.ok) {
+        throw new Error("Failed to send message");
+      }
+
+      const responseData = JSON.parse(responseText); // Try parsing the response text as JSON
+
+      // Ensure new message gets added to the UI
+      setMessages((prevMessages) => [...prevMessages, responseData]);
+      
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+
+    setInput("");
+  };
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -36,11 +90,11 @@ export default function Chat() {
     }
   }, []);
 
-  const sendMessage = () => {
-    if (input.trim() === "") return;
-    setMessages([...messages, { id: messages.length + 1, text: input, sender: "user" }]);
-    setInput("");
-  };
+  // const sendMessage = () => {
+  //   if (input.trim() === "") return;
+  //   setMessages([...messages, { id: messages.length + 1, text: input, sender: "user" }]);
+  //   setInput("");
+  // };
 
   const togglePlayPause = () => {
     if (!audioRef.current) return;
@@ -63,6 +117,14 @@ export default function Chat() {
     audio.addEventListener("timeupdate", updateProgress);
     return () => audio.removeEventListener("timeupdate", updateProgress);
   }, []);
+
+  // scroll whenever messages are sent
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+  
 
   return (
     <div className="flex flex-col h-screen w-screen bg-gray-900">
@@ -131,20 +193,25 @@ export default function Chat() {
         </div>
 
         <div className="flex flex-col w-1/3 h-[calc(100vh-4rem)] bg-[#848AAB] bg-opacity-80 backdrop-blur-lg p-4 shadow-lg rounded-l-xl">
-          <div className="flex-1 overflow-y-auto p-4 space-y-3">
-            {messages.map((msg) => (
+        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+          {messages.map((msg) => {
+            const isCurrentUser = msg.senderId === currentUserId;
+            return (
               <div
-                key={msg.id}
+                key={msg._id}
                 className={`py-2 px-4 rounded-full text-sm max-w-[75%] ${
-                  msg.sender === "user"
-                    ? "bg-[#272C4C] text-white self-end ml-auto"
-                    : "bg-[#CBC0BD] text-black self-start"
+                  isCurrentUser
+                    ? "bg-[#272C4C] text-white self-end ml-auto text-right"
+                    : "bg-[#CBC0BD] text-black self-start text-left"
                 }`}
               >
                 {msg.text}
               </div>
-            ))}
-          </div>
+            );
+          })}
+          <div ref={messagesEndRef} />
+        </div>
+
 
           <div className="mt-4 flex">
             <input

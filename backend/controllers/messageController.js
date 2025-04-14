@@ -42,7 +42,7 @@ const sendMessage = async (req, res) => {
 
         console.log("Message saved:, " + message);
 
-        res.status(201).json(responseMessage ? { message: responseMessage } : message);
+        res.status(201).json(responseMessage ? { _id: new mongoose.Types.ObjectId(), text: responseMessage, senderId } : message);
     } catch (error) {
         console.error("Error in sendMessage:", error);
         res.status(500).json({ error: "Server error: Unable to send message" });

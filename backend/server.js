@@ -49,8 +49,8 @@ const io = require('socket.io')(server, {
 
 // ---------------------------------------------------------------
 
-//reset password email
-
+//reset password email, not being used
+/*
 function sendEmail(email) { //use nodemailer to send email
     return new Promise((resolve, reject) => {
         var transporter = nodemailer.createTransport({
@@ -95,7 +95,7 @@ app.post("/send-password-reset", async (req, res) => { //recieves react post req
         res.status(500).json(error);
     }
 })
-
+*/
 
 app.use(express.static(path.join(__dirname, "build"))); //connects the react frontend
 

@@ -1,21 +1,32 @@
 const nodemailer = require("nodemailer");
-require("dotenv").config();
 
-const sendEmail = async (to, subject, text) => {
-    const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS,
-        },
-    });
+function sendSignUpEmail(email) { //use nodemailer to send email
+    return new Promise((resolve, reject) => {
+        var transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: "zhao.annat@gmail.com",
+                pass: "tqmfolrugdkwveop"
+            }
+        })
 
-    await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to,
-        subject,
-        text,
-    });
-};
+        const mail = {
+            from:"zhao.annat@gmail.com",
+            to: email,
+            subject: "LoFi Loop Sign Up Confirmation",
+            text: "Thank you for signing up for LoFi Loop! Your account has been successfully created. \n Happy listening!"
+        }
 
-module.exports = sendEmail;
+        transporter.sendMail(mail, function(error, info){
+            if (error) {
+                console.log(error);
+                reject({message:"error"});
+            }
+            resolve({message:"success"});
+        });
+    })
+}
+
+
+module.exports = sendSignUpEmail; //export sendSignUpEmail function
+

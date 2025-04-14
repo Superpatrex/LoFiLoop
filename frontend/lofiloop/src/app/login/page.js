@@ -7,10 +7,11 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState([]);
+    const [message, setMessage] = useState("");
 
     const validateEmail = (email) => /^[^\s@]+@[^\s@]+.[^\s@]+$/.test(email);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
         let validationErrors = [];
 
@@ -24,8 +25,33 @@ const Login = () => {
 
         setErrors(validationErrors);
 
-        if (validationErrors.length === 0) {
-            alert('Login successful!');
+        if (validationErrors.length > 0) {   //if error, don't login
+            return;
+        }
+
+        try {
+            const response = await fetch("http://localhost:3001/auth/login", { //send email and password to backend
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({email, password}),
+            });
+            const data = await response.json(); //get response from backend
+            console.log(data);
+            setMessage(data.message);
+    
+            if (data.message == "Login Successful") {
+                    alert("Login Successful")
+                    localStorage.setItem("token", data.token);
+                    setEmail("");
+                    setMessage("");
+            }
+            if (data.message == "Invalid credentials") {
+                alert("Email or Password invalid");
+            }
+
+        } catch (error) {
+            setMessage("Failed");
+            console.error(error);
         }
     };
 

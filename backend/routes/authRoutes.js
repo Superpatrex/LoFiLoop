@@ -8,7 +8,7 @@ require("dotenv").config();
 const router = express.Router();
 
 // User Registration
-router.post("/register", async (req, res) => {
+router.post("/register", async (req, res) => { //recieve the post request
     const { username, email, password } = req.body;
 
     try {
@@ -28,7 +28,6 @@ router.post("/register", async (req, res) => {
         const response = await sendSignUpEmail(email);
         console.log(response);
         console.log("Log 5");
-        res.status(201).json({ message: "User registered. Verify your email." });
     } catch (error) {
         res.status(500).json({ message: "Server error " + error });
     }
@@ -43,10 +42,8 @@ router.post("/login", async (req, res) => {
         if (!user || !(await bcrypt.compare(password, user.password)))
             return res.status(400).json({ message: "Invalid credentials" });
 
-        if (!user.isVerified) return res.status(400).json({ message: "Verify your email first" });
-
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        res.json({ token });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" }); //token contains info about user
+        res.json({ token, message: "Login Successful", user: {username: user.username, email: user.email} });
     } catch (error) {
         res.status(500).json({ message: "Server error" });
     }

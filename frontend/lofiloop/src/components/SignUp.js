@@ -42,7 +42,7 @@ const SignUp = () => {
 
         try {
 
-            const response = await fetch("http://localhost:3001/auth/register", { //send post request to backend
+            const response = await fetch("http://localhost:3001/auth/register", { //send email username password to backend
                 method: "POST",
                 headers: { "Content-Type": "application/json",},
                 body: JSON.stringify({

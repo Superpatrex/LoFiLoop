@@ -1,16 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import styles from './login.module.css'; // Correctly import CSS module
 
-const Login = () => {
+export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState([]);
     const [message, setMessage] = useState("");
+    const router = useRouter();
 
     const validateEmail = (email) => /^[^\s@]+@[^\s@]+.[^\s@]+$/.test(email);
-
+    
     const handleSubmit = async(e) => {
         e.preventDefault();
         let validationErrors = [];
@@ -40,11 +42,15 @@ const Login = () => {
             setMessage(data.message);
     
             if (data.message == "Login Successful") {
-                    alert("Login Successful")
+                    // alert("Login Successful")
                     localStorage.setItem("token", data.token);
                     setEmail("");
                     setMessage("");
+                    console.log("Login successful, redirecting...");
+                    router.push('/chat');
+
             }
+
             if (data.message == "Invalid credentials") {
                 alert("Email or Password invalid");
             }
@@ -94,5 +100,3 @@ const Login = () => {
         </>
     );
 };
-
-export default Login;

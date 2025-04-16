@@ -1,0 +1,92 @@
+"use client";
+
+import React from 'react';
+import './AboutUs.css';
+
+export default function AboutUs() {
+    const team = [
+        { name: 'Jack Andrews', role: 'Project Lead', initial: 'J' },
+        { name: 'Alysha Irvin', role: 'Project Lead', initial: 'A' },
+        { name: 'Calvin Cheah', role: 'Developer', initial: 'C' },
+        { name: 'Krupa Patel', role: 'Developer', initial: 'K' },
+        { name: 'Jessica Osborne', role: 'Developer', initial: 'J' },
+        { name: 'Xinyu Su', role: 'Developer', initial: 'X' },
+        { name: 'Aumrita Maitra', role: 'Developer', initial: 'A' },
+        { name: 'Eric Son', role: 'Developer', initial: 'E' },
+    ];
+
+    return (
+        <div className="aboutContainer">
+            <div className="aboutHeader">
+                <h1>About Lofi-Loop</h1>
+                <div className="headerAccent"></div>
+            </div>
+            
+            <div className="aboutContent">
+                <section className="aboutText">
+                    <div className="textCard">
+                        <h2>Our Mission</h2>
+                        <p>
+                            Tired of searching for the perfect study or work playlist? 
+                            Our web app <span className="highlight">Lofi-Loop</span> generates AI-powered lo-fi music tailored 
+                            to enhance focus and productivity. With functional signup and login systems, 
+                            users can create accounts to personalize their experience.
+                        </p>
+                        <p>
+                            Simply open a tab to enjoy music with an audience from around the world, all at the same time.
+                        </p>
+                    </div>
+                    
+                    <div className="textCard">
+                        <h2>Our Technology</h2>
+                        <div className="techGrid">
+                            <div className="techItem">
+                                <div className="techIcon frontend"></div>
+                                <h3>Frontend & Backend</h3>
+                                <p>React & Next.js</p>
+                            </div>
+                            <div className="techItem">
+                                <div className="techIcon database"></div>
+                                <h3>Database</h3>
+                                <p>MongoDB</p>
+                            </div>
+                            <div className="techItem">
+                                <div className="techIcon visualization"></div>
+                                <h3>Visualization</h3>
+                                <p>p5.js</p>
+                            </div>
+                            <div className="techItem">
+                                <div className="techIcon ai"></div>
+                                <h3>AI Features</h3>
+                                <p>OpenAI</p>
+                            </div>
+                        </div>
+                        <p className="aiDescription">
+                            OpenAI components power our live chat feature, as well as the 
+                            AI-generated music, album names, covers, and even artist names. 
+                            Enjoy seamless, AI-generated content and join a global community of 
+                            focused lo-fi listeners!
+                        </p>
+                    </div>
+                </section>
+                
+                <aside className="teamSection">
+                    <h2>Meet Our Team</h2>
+                    <div className="teamGrid">
+                        {team.map((member, index) => (
+                            <div key={index} className={`teamCard ${member.role === 'Project Lead' ? 'leaderCard' : ''}`}>
+                                <div className="memberAvatar">{member.initial}</div>
+                                <div className="memberInfo">
+                                    <h3>{member.name}</h3>
+                                    <span className={member.role === 'Project Lead' ? 'roleLead' : 'roleDev'}>
+                                        {member.role}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </aside>
+            </div>
+        </div>
+    );
+};

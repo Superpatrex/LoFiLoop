@@ -1,0 +1,297 @@
+.aboutContainer {
+    margin: 50px auto 40px auto; /* Reduced top margin for better centering */
+    padding: 30px;
+    width: 90%;
+    max-width: 1200px;
+    background-color: #1e2142;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    color: #eaeaea;
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    box-sizing: border-box; /* Ensures padding is included in width calculation */
+    position: relative; /* Establishes positioning context */
+    overflow: visible; /* Ensures content isn't cut off */
+}
+
+.aboutHeader {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.aboutHeader h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, #9d50bb, #6e48aa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: 1px;
+}
+
+.headerAccent {
+    height: 4px;
+    width: 80px;
+    background: linear-gradient(90deg, #9d50bb, #6e48aa);
+    margin: 0 auto;
+    border-radius: 2px;
+}
+
+.aboutContent {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+@media (min-width: 900px) {
+    .aboutContent {
+        grid-template-columns: 1.5fr 1fr;
+    }
+}
+
+.textCard {
+    background-color: #272c4c;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.textCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+.aboutText h2, .teamSection h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #fff;
+    position: relative;
+    display: inline-block;
+}
+
+.aboutText h2:after, .teamSection h2:after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(90deg, #9d50bb, #6e48aa);
+    border-radius: 2px;
+}
+
+.aboutText p {
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 15px;
+    color: #d1d1d1;
+}
+
+.highlight {
+    color: #a18dff;
+    font-weight: 600;
+}
+
+.techGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.techItem {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    transition: all 0.25s ease;
+}
+
+.techItem:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px);
+}
+
+.techIcon {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 12px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.techIcon:before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.frontend {
+    background: linear-gradient(135deg, #61dafb, #764abc);
+}
+
+.database {
+    background: linear-gradient(135deg, #13aa52, #41b883);
+}
+
+.visualization {
+    background: linear-gradient(135deg, #ed225d, #f15a24);
+}
+
+.ai {
+    background: linear-gradient(135deg, #10a37f, #5436da);
+}
+
+.techItem h3 {
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.techItem p {
+    font-size: 14px;
+    color: #a6a6a6;
+}
+
+.aiDescription {
+    font-style: italic;
+    font-size: 15px;
+    margin-top: 15px;
+    text-align: center;
+    color: #b8b8b8;
+}
+
+.teamSection {
+    padding: 25px;
+    background-color: #272c4c;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.teamGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.teamCard {
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.teamCard:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    border-color: rgba(157, 80, 187, 0.3);
+}
+
+.leaderCard {
+    border-color: rgba(157, 80, 187, 0.4);
+    background-color: rgba(157, 80, 187, 0.08);
+}
+
+.memberAvatar {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(45deg, #9d50bb, #6e48aa);
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.leaderCard .memberAvatar {
+    background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+    color: #333;
+}
+
+.memberInfo {
+    padding: 12px;
+    text-align: center;
+}
+
+.memberInfo h3 {
+    margin: 0 0 8px 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.roleLead, .roleDev {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.roleLead {
+    background-color: rgba(255, 154, 158, 0.2);
+    color: #ff9a9e;
+}
+
+.roleDev {
+    background-color: rgba(110, 72, 170, 0.2);
+    color: #a18dff;
+}
+
+/* Add this to ensure parent containers don't clip */
+body, html {
+    overflow-x: hidden;
+    min-height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+/* Optional: if a fixed header is causing the content to be hidden, add some top padding to the body */
+body {
+    padding-top: 20px; /* Adjust as needed */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .aboutContainer {
+        margin: 60px auto 30px auto;
+        padding: 20px;
+    }
+    
+    .techGrid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .teamGrid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .aboutContainer {
+        margin: 40px auto 20px auto;
+        padding: 15px;
+    }
+    
+    .aboutHeader h1 {
+        font-size: 28px;
+    }
+    
+    .techGrid {
+        grid-template-columns: 1fr;
+    }
+}

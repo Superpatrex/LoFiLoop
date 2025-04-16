@@ -1,6 +1,7 @@
-"use client";
+"use client"; 
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import './SignUp.css';
 
 const SignUp = () => {
@@ -41,22 +42,17 @@ const SignUp = () => {
         }
 
         try {
-
-            const response = await fetch("http://localhost:3001/auth/register", { //send email username password to backend
+            const response = await fetch("http://localhost:3001/send-confirmation", { //send post request to backend
                 method: "POST",
                 headers: { "Content-Type": "application/json",},
-                body: JSON.stringify({
-                    username,
-                    email,
-                    password
-                }), //body contains the email address                
+                body: JSON.stringify({ email }), //body contains the email address                
             });
                     
             const data = await response.json(); //get response from backend
             console.log(data);
             setMessage(data.message);
     
-            if (data.message == "User registered. Verify your email.") {
+            if (data.message == "success") {
                     alert("Sign up successful, confirmation email sent")
                     setEmail("");
                     setMessage("");
@@ -79,38 +75,51 @@ const SignUp = () => {
                 </ul>
             )}
             <form onSubmit={handleSubmit}>
-                <label>Create Username</label>
-                <input
-                    type="text"
-                    required
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
+                <div className="form-group">
+                    <div className="form-inputs">
+                        <label>Create Username</label>
+                        <input
+                            type="text"
+                            required
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
 
-                <label>Email</label>
-                <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                
-                <label>Set Password</label>
-                <input
-                    type="password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+                        <label>Email</label>
+                        <input
+                            type="email"
+                            required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        
+                        <label>Set Password</label>
+                        <input
+                            type="password"
+                            required
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
 
-                <label>Type Password Again</label>
-                <input
-                    type="password"
-                    required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-                
+                        <label>Type Password Again</label>
+                        <input
+                            type="password"
+                            required
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                        />
+                    </div>
+                    <div className="password-requirements">
+                        <h3>Password Requirements:</h3>
+                        <ul>
+                            <li>At least 8 characters long</li>
+                            <li>Includes an uppercase letter</li>
+                            <li>Includes a lowercase letter</li>
+                            <li>Includes a number</li>
+                            <li>Includes a special character</li>
+                        </ul>
+                    </div>
+                </div>
                 <button type="submit">Sign Up!</button>
             </form>
         </div>

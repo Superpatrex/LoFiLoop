@@ -1,5 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import NavBar from "../components/NavBar"; // Import the NavBar component
+import PageTitle from "../components/PageTitle"; // Import the PageTitle component
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,7 +24,10 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        {/* PageTitle appears above the NavBar */}
+        <PageTitle />
+        <NavBar />
+        <main>{children}</main>
       </body>
     </html>
   );

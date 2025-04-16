@@ -26,7 +26,6 @@ export default function RootLayout({ children }) {
       >
         {/* PageTitle appears above the NavBar */}
         <PageTitle />
-        <NavBar />
         <main>{children}</main>
       </body>
     </html>

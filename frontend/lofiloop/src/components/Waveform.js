@@ -64,7 +64,7 @@ const Waveform = ({ className }) => {
 
             // Draw waveform
             p.stroke(255);
-            p.strokeWeight(4);
+            p.strokeWeight(5);
             p.noFill();
 
             const waveform = fft.waveform();

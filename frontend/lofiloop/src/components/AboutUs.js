@@ -5,14 +5,15 @@ import './AboutUs.css'; // Import the CSS
 
 export default function AboutUs() {
     const team = [
-        { name: 'Jack Andrews', role: 'Project Lead' },
-        { name: 'Alysha Irvin', role: 'Project Lead' },
-        { name: 'Calvin Cheah', role: 'Developer' },
-        { name: 'Krupa Patel', role: 'Developer' },
-        { name: 'Jessica Osborne', role: 'Developer' },
-        { name: 'Xinyu Su', role: 'Developer' },
-        { name: 'Aumrita Maitra', role: 'Developer' },
-        { name: 'Eric Son', role: 'Developer' },
+        { name: 'Jack Andrews', role: 'Project Lead', github: 'https://github.com/Superpatrex' },
+        { name: 'Alysha Irvin', role: 'Project Lead', github: 'https://github.com/alyirvin' },
+        { name: 'Calvin Cheah', role: 'Developer', github: 'https://github.com/calvinc903' },
+        { name: 'Krupa Patel', role: 'Developer', github: 'https://github.com/krupaapatell' },
+        { name: 'Jessica Osborne', role: 'Developer', github: 'https://github.com/0zzy4' },
+        { name: 'Xinyu Su', role: 'Developer', github: 'https://github.com/c-mfy' },
+        { name: 'Aumrita Maitra', role: 'Developer', github: 'https://github.com/aumritam' },
+        { name: 'Eric Son', role: 'Developer', github: 'https://github.com/eson39' },
+        { name: 'Anna Zhao', role: 'Developer', github: 'https://github.com/zha0anna'}
     ];
 
     return (
@@ -40,7 +41,13 @@ export default function AboutUs() {
                 <ul>
                     {team.map((member, index) => (
                         <li key={index} className="teamMember">
-                            {member.name}
+                            {member.github ? (
+                                <a href={member.github} target="_blank" rel="noopener noreferrer">
+                                    {member.name}
+                                </a>
+                            ) : (
+                                member.name
+                            )}
                             {member.role === 'Project Lead' ? (
                                 <span className="projectManager">Project Lead</span>
                             ) : (

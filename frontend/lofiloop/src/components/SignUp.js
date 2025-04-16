@@ -6,40 +6,39 @@ import './SignUp.css';
 
 const SignUp = () => {
     const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
+    const [email, setEmail]       = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [errors, setErrors] = useState([]);
-    const [message, setMessage] = useState("");
+    const [errors, setErrors]     = useState([]);
+    const [message, setMessage]   = useState("");
 
-    const validateEmail = (email) => {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    };
+    const validateEmail = (email) =>
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-    const validatePassword = (password) => {
-        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])[A-Za-z\d!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]{8,}$/.test(password);
-    };
+    // individual tests
+    const tests = [
+      { label: 'At least 8 characters long',       test: pw => pw.length >= 8 },
+      { label: 'Includes an uppercase letter',     test: pw => /[A-Z]/.test(pw) },
+      { label: 'Includes a lowercase letter',     test: pw => /[a-z]/.test(pw) },
+      { label: 'Includes a number',               test: pw => /\d/.test(pw) },
+      { label: 'Includes a special character',    test: pw => /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(pw) },
+    ];
 
     const handleSubmit = async(e) => {
         e.preventDefault();
-
-        //check for validation errors first
         let validationErrors = [];
-        
+
         if (!validateEmail(email)) {
             validationErrors.push('Invalid email format.');
         }
-        if (!validatePassword(password)) {
-            validationErrors.push('Password must be at least 8 characters long and include an uppercase letter, lowercase letter, a number, and a special character.');
+        if (tests.some(t => !t.test(password))) {
+            validationErrors.push('Password does not meet all requirements.');
         }
         if (password !== confirmPassword) {
             validationErrors.push('Passwords do not match.');
         }
         setErrors(validationErrors);
-
-        if (validationErrors.length > 0) {   //if error, don't send email
-            return;
-        }
+        if (validationErrors.length) return;
 
         try {
             const response = await fetch("http://localhost:3001/send-confirmation", { //send post request to backend
@@ -61,7 +60,6 @@ const SignUp = () => {
             setMessage("Failed");
             console.error(error);
         }
-        
     };
 
     return (
@@ -69,57 +67,58 @@ const SignUp = () => {
             <h1>Sign up for an account with us here!</h1>
             {errors.length > 0 && (
                 <ul className="error-messages">
-                    {errors.map((error, index) => (
-                        <li key={index}>{error}</li>
-                    ))}
+                    {errors.map((e,i) => <li key={i}>{e}</li>)}
                 </ul>
             )}
             <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <div className="form-inputs">
-                        <label>Create Username</label>
-                        <input
-                            type="text"
-                            required
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                        />
+                <div className="form-inputs">
+                    <label>Create Username</label>
+                    <input
+                        type="text"
+                        required
+                        value={username}
+                        onChange={e => setUsername(e.target.value)}
+                    />
 
-                        <label>Email</label>
-                        <input
-                            type="email"
-                            required
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                        
-                        <label>Set Password</label>
-                        <input
-                            type="password"
-                            required
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
+                    <label>Email</label>
+                    <input
+                        type="email"
+                        required
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                    />
+                    
+                    <label>Set Password</label>
+                    <input
+                        type="password"
+                        required
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                    />
 
-                        <label>Type Password Again</label>
-                        <input
-                            type="password"
-                            required
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                        />
-                    </div>
-                    <div className="password-requirements">
-                        <h3>Password Requirements:</h3>
-                        <ul>
-                            <li>At least 8 characters long</li>
-                            <li>Includes an uppercase letter</li>
-                            <li>Includes a lowercase letter</li>
-                            <li>Includes a number</li>
-                            <li>Includes a special character</li>
-                        </ul>
-                    </div>
+                    <label>Type Password Again</label>
+                    <input
+                        type="password"
+                        required
+                        value={confirmPassword}
+                        onChange={e => setConfirmPassword(e.target.value)}
+                    />
                 </div>
+
+                <div className="password-requirements">
+                    <h3>Password Requirements:</h3>
+                    <ul>
+                        {tests.map((t, i) => (
+                          <li
+                            key={i}
+                            className={t.test(password) ? 'valid' : 'invalid'}
+                          >
+                            {t.label}
+                          </li>
+                        ))}
+                    </ul>
+                </div>
+
                 <button type="submit">Sign Up!</button>
             </form>
         </div>

@@ -13,6 +13,7 @@ export default function Chat() {
   const [songTitle, setSongTitle] = useState("Loading...");
   const [volume, setVolume] = useState(0.5);
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [showSettings, setShowSettings] = useState(false);
 
   const audioRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -144,73 +145,122 @@ return (
             <div className="flex items-center space-x-8">
                 <h1 className="text-white text-2xl font-bold">LofiLoop</h1>
                 <nav className="flex space-x-6 text-white">
-                    <a href="#" className="hover:text-gray-400">Home</a>
-                    <a href="#" className="hover:text-gray-400">Resource</a>
-                    <a href="#" className="hover:text-gray-400">About Us</a>
+                  <a href="#" className="hover:text-gray-400">Home</a>
+                  <a href="#" className="hover:text-gray-400">Chat</a>
+                  <a href="#" className="hover:text-gray-400">About</a>
                 </nav>
-            </div>
-            <div className="text-white text-sm">Account Stuff</div>
-        </div>
-
-        <div className="flex flex-grow w-full">
-            <div className="flex flex-col justify-center w-2/3 p-8">
-                <div className="mt-2 bg-gray-800 text-white px-4 py-2 rounded-full w-fit">
-                    <span className="font-bold">36</span> listeners
-                </div>
-
-                <div className="mt-10 flex flex-col items-center space-y-6">
-                    <div className="relative w-56 h-56 rounded-full bg-gray-600 flex items-center justify-center shadow-xl">
-                        <div className="absolute inset-0">
-                            <Waveform className="w-full h-full" />
-                        </div>
-                        <div className="absolute inset-0 flex justify-center items-center">
-                            <div className="w-40 h-40 bg-gray-500 rounded-full"></div>
-                        </div>
-                    </div>
-                    <h2 className="text-white text-3xl font-bold mb-0">{songTitle}</h2>
-                    <p className="text-gray-400 text-lg leading-tight mt-0">AI-generated Lofi Music</p>
-
-                    <audio ref={audioRef} src="lukrembo_biscuit.mp3" />
-
-                    <div className="w-2/3 mt-4 flex flex-col space-y-2">
-                        <div className="flex items-center w-full space-x-3">
-                            <span className="text-white">🔊</span>
-                            <div className="relative w-24 h-3">
-                                <input
+                      </div>
+                      <div className="relative">
+                        <button 
+                          className="text-white text-lg hover:text-gray-300"
+                          onClick={() => setShowSettings(!showSettings)}
+                        >⚙</button>
+                        
+                        {showSettings && (
+                          <div className="absolute right-0 mt-2 w-64 bg-[#272C4C] rounded-lg shadow-xl z-10 p-4">
+                            <h3 className="text-white font-semibold mb-3 border-b border-gray-600 pb-2">Settings</h3>
+                            
+                            <div className="space-y-4">
+                              <div className="flex flex-col">
+                                <label className="text-sm text-gray-300 mb-1">Volume</label>
+                                <div className="flex items-center space-x-2">
+                                  <span className="text-white">🔊</span>
+                                  <input
                                     type="range"
                                     min="0"
-                                    max="1"
+                                    max="1" 
                                     step="0.01"
                                     value={volume}
                                     onChange={(e) => setVolume(parseFloat(e.target.value))}
-                                    className="absolute w-full h-full opacity-0 cursor-pointer z-10"
-                                />
-                                <div className="absolute w-full h-3 bg-gray-600 rounded-full">
-                                    <div 
-                                        className="absolute top-0 h-full bg-white rounded-full" 
-                                        style={{ width: `${volume * 100}%` }}
-                                    ></div>
+                                    className="w-full"
+                                  />
                                 </div>
+                              </div>
+                              
+                              <div className="flex flex-col">
+                                <label className="text-sm text-gray-300 mb-1">Theme</label>
+                                <select className="bg-gray-700 text-white p-1 rounded">
+                                  <option>Dark</option>
+                                  <option>Light</option>
+                                </select>
+                              </div>
+                              
+                              <div className="flex flex-col">
+                                <label className="text-sm text-gray-300 mb-1">Notifications</label>
+                                <div className="flex items-center">
+                                  <input type="checkbox" className="mr-2" />
+                                  <span className="text-white text-sm">Enable notifications</span>
+                                </div>
+                              </div>
+                              
+                              <button className="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 rounded-lg mt-2">
+                                Sign Out
+                              </button>
                             </div>
-                        </div>
-                        <div className="w-full h-3 bg-gray-600 rounded-full relative">
-                            <div className="absolute top-0 h-full bg-white rounded-full" style={{ width: `${progress}%` }}></div>
-                        </div>
-                        <div className="w-full flex justify-between text-white text-sm">
-                            <span>{audioRef.current ? formatTime(audioRef.current.currentTime) : "0:00"}</span>
-                            <span>{audioRef.current ? formatTime(audioRef.current.duration) : "0:00"}</span>
-                        </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
 
-                    <div className="flex items-center justify-center bg-gray-800 p-3 rounded-full shadow-lg">
-                        <button 
-                            className="text-white hover:text-gray-300 px-6 py-2 mx-2 bg-gray-700 rounded-full transition-transform hover:scale-110"
-                            onClick={() => audioRef.current.currentTime = 0}
-                        >
-                            <span className="text-xl">⏪︎</span>
-                        </button>
-                        <button
-                            className="text-white hover:text-gray-300 px-6 py-2 mx-2 bg-gray-700 rounded-full transition-transform hover:scale-110"
+                    <div className="flex flex-grow w-full">
+                      <div className="flex flex-col justify-center w-2/3 p-8">
+                        <div className="mt-2 bg-gray-800 text-white px-4 py-2 rounded-full w-fit">
+                          <span className="font-bold">36</span> listeners
+                        </div>
+
+                        <div className="mt-10 flex flex-col items-center space-y-6">
+                          <div className="relative w-56 h-56 rounded-full bg-gray-600 flex items-center justify-center shadow-xl">
+                            <div className="absolute inset-0">
+                              <Waveform className="w-full h-full" />
+                            </div>
+                            <div className="absolute inset-0 flex justify-center items-center">
+                              <div className="w-40 h-40 bg-gray-500 rounded-full"></div>
+                            </div>
+                          </div>
+                          <h2 className="text-white text-3xl font-bold mb-0">{songTitle}</h2>
+                          <p className="text-gray-400 text-lg leading-tight mt-0">AI-generated Lofi Music</p>
+
+                          <audio ref={audioRef} src="lukrembo_biscuit.mp3" />
+
+                          <div className="w-2/3 mt-4 flex flex-col space-y-2">
+                            <div className="flex items-center w-full space-x-3">
+                              <span className="text-white">🔊</span>
+                              <div className="relative w-24 h-3">
+                                <input
+                                  type="range"
+                                  min="0"
+                                  max="1"
+                                  step="0.01"
+                                  value={volume}
+                                  onChange={(e) => setVolume(parseFloat(e.target.value))}
+                                  className="absolute w-full h-full opacity-0 cursor-pointer z-10"
+                                />
+                                <div className="absolute w-full h-3 bg-gray-600 rounded-full">
+                                  <div 
+                                    className="absolute top-0 h-full bg-white rounded-full" 
+                                    style={{ width: `${volume * 100}%` }}
+                                  ></div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="w-full h-3 bg-gray-600 rounded-full relative">
+                              <div className="absolute top-0 h-full bg-white rounded-full" style={{ width: `${progress}%` }}></div>
+                            </div>
+                            <div className="w-full flex justify-between text-white text-sm">
+                              <span>{audioRef.current ? formatTime(audioRef.current.currentTime) : "0:00"}</span>
+                              <span>{audioRef.current ? formatTime(audioRef.current.duration) : "0:00"}</span>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center justify-center bg-gray-800 p-3 rounded-full shadow-lg">
+                            <button 
+                              className="text-white hover:text-gray-300 px-6 py-2 mx-2 bg-gray-700 rounded-full transition-transform hover:scale-110"
+                              onClick={() => audioRef.current.currentTime = 0}
+                            >
+                              <span className="text-xl">⏪︎</span>
+                            </button>
+                            <button
+                              className="text-white hover:text-gray-300 px-6 py-2 mx-2 bg-gray-700 rounded-full transition-transform hover:scale-110"
                             //onClick={togglePlayPause}
                         >
                             <span className="text-2xl">{isPlaying ? "⏹︎" : "▶"}</span>

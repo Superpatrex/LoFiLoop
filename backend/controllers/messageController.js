@@ -1,11 +1,13 @@
 const Message = require("../models/Message");
 const User = require("../models/User");
 const { handleRequest, handleQueue, handleCommands } = require("../utils/songRequests");
+const mongoose = require("mongoose");
 
 // send message
 const sendMessage = async (req, res) => {
     try {
-        const { senderId, text } = req.body;
+        const senderId = req.user.id;
+        const text = req.body.text;
 
         if (!senderId || !text) {
             return res.status(400).json({ error: "senderId and text are required"});

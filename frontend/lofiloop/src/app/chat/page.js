@@ -2,7 +2,7 @@
 
 "use client";
 import { useState, useRef, useEffect } from "react";
-
+import { jwtDecode } from "jwt-decode";
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
@@ -11,10 +11,21 @@ export default function Chat() {
   const [progress, setProgress] = useState(0);
   const [songTitle, setSongTitle] = useState("Loading...");
   const [volume, setVolume] = useState(0.5);
+  const [currentUserId, setCurrentUserId] = useState(null);
+
   const audioRef = useRef(null);
   const messagesEndRef = useRef(null);
 
-  const currentUserId = "67be4b0a706d6b50fd8ad65a";
+  useEffect(() => {
+    // decode token and set user ID
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded = jwtDecode(token);
+      setCurrentUserId(decoded.id); // assuming token payload has `id`
+    }
+  }, []);
+
+  // const currentUserId = "67be4b0a706d6b50fd8ad65a";
 
   // fetch messages from MongoDB
   useEffect (() => {
@@ -36,11 +47,15 @@ export default function Chat() {
     if (input.trim() === "") return;
 
     const newMessage = { senderId: currentUserId, text: input};
-
+    const token = localStorage.getItem("token"); // get token
+    
     try {
       const response = await fetch("http://localhost:3001/api/message/send", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(newMessage),
       });
 

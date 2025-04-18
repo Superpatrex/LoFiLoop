@@ -1,7 +1,8 @@
 .SignUp {
     margin: 0 auto;
     border: 2px solid #ccc;
-    border-radius: 25px;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
     padding: 20px 50px;
     width: 500px;
     background-color: #272c4c;
@@ -11,10 +12,8 @@
 .SignUp h1 {
     text-align: center;
     color: white;
-    font-family: "Century Gothic", sans-serif; 
-    font-size: 22px; 
+    font-size: 50px; 
     font-weight: 700; 
-    margin-bottom: 20px;
 }
 
 .form-inputs label {
@@ -124,7 +123,6 @@
     transform: scale(1.05);
 }
 
-/* errors */
 .error-messages {
     color: white;
     font-family: "Century Gothic", sans-serif;
@@ -132,4 +130,208 @@
     margin-bottom: 10px;
     padding-left: 0;
     list-style: none;
+}
+
+.LogAndSign
+{
+    display: flex;
+    flex-direction: row;
+    height: 800px;
+    font-family: "Century Gothic", sans-serif; 
+}
+
+.Login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+    border: 2px solid #ccc;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    padding: 40px;
+    width: 500px;
+    background-color: #272c4c;
+    box-shadow: 5px 5px 5px #252337;
+}
+
+.Login h1 {
+    text-align: center;
+    color: white;
+    font-size: 50px; 
+    font-weight: 700; 
+    margin-bottom: 20px;
+}
+
+.Login h2
+{
+    text-align: center;
+    color: white;
+    font-size: 20px; 
+    line-height: 26.4px;
+    margin-bottom: 100px;
+}
+
+.Login label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 15px; 
+    font-style: normal; 
+    font-variant: normal; 
+    font-weight: 400; 
+    line-height: 26.4px;
+    color: white;
+}
+
+.Login input {
+    width: 95%;
+    margin: 0 auto;
+    border-radius: 10px;
+    padding: 10px;
+    border-color: white;
+    color: #272c4c;
+    font-size: 15px; 
+    font-style: normal; 
+    font-variant: normal; 
+    font-weight: 525px; 
+    line-height: 26.4px;
+    outline: none; 
+    border: 2px solid #848aab; 
+    box-shadow: none; 
+    height: 90%; 
+}
+
+.Login button {
+    margin: 0 auto;
+    border: 2px solid white;
+    border-radius: 10px;
+    padding: 10px;
+    width: 100%;
+    height: 9%;
+    margin-top: 30px;
+    background-color: #848aab;
+    color: white;
+    cursor: pointer;
+    font-size: 17px; 
+    font-style: normal; 
+    font-variant: normal; 
+    font-weight: 700; 
+    line-height: 26.4px;
+}
+
+.Login button:hover {
+    background-color: #4e314d;
+    transform: scale(1.1);
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+.error-messages {
+    color: white;
+    font-size: 10px; 
+    font-style: normal; 
+    font-variant: normal; 
+    font-weight: 500; 
+    line-height: 11px;
+    list-style-type: none;
+    padding: 0;
+}
+
+.Login p {
+    color: white;
+    font-size: 15px; 
+    font-style: normal; 
+    font-variant: normal; 
+    font-weight: 540; 
+    line-height: 26.4px;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 0;
+}
+
+.slider
+{
+    position: absolute;
+    height: 800px;
+    margin: 0 auto;
+    border: 2px solid #ccc;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    padding: 20px 50px;
+    width: 500px;
+    background-color: #272c4c;
+    box-shadow: 5px 5px 5px #252337;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#slideHeader
+{
+    font-size: 50px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#slideClick
+{
+    cursor: pointer;
+    font-size: 22px;
+    margin-bottom: 40px;
+}
+
+#slideClick:hover
+{
+    color: #848aab;
+}
+
+.slideRight
+{
+    animation: slideRight 0.5s ease-in-out forwards;
+}
+
+.slideLeft
+{
+    animation: slideLeft 0.5s ease-in-out forwards;
+}
+
+@keyframes slideRight
+{
+    from
+    {
+        transform: translateX(0%);
+        border-top-left-radius: 25px;
+        border-bottom-left-radius: 25px;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+    to
+    {
+        transform: translateX(100%);
+        border-top-right-radius: 25px;
+        border-bottom-right-radius: 25px;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+}
+
+@keyframes slideLeft
+{
+    from
+    {
+        transform: translateX(100%);
+        border-top-right-radius: 25px;
+        border-bottom-right-radius: 25px;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+    to
+    {
+        transform: translateX(0%);
+        border-top-left-radius: 25px;
+        border-bottom-left-radius: 25px;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
 }

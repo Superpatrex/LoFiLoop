@@ -38,24 +38,46 @@ export default function AboutUs() {
             </section>
             <aside className="teamList">
                 <h2>The Team</h2>
-                <ul>
-                    {team.map((member, index) => (
-                        <li key={index} className="teamMember">
-                            {member.github ? (
-                                <a href={member.github} target="_blank" rel="noopener noreferrer">
-                                    {member.name}
-                                </a>
-                            ) : (
-                                member.name
-                            )}
-                            {member.role === 'Project Lead' ? (
-                                <span className="projectManager">Project Lead</span>
-                            ) : (
-                                <span className="developerRole">Developer</span>
-                            )}
-                        </li>
-                    ))}
-                </ul>
+                <div className="teamGroup1">
+                    <ul>
+                        {team.slice(0, 4).map((member, index) => (
+                            <li key={index} className="teamMember">
+                                {member.github ? (
+                                    <a href={member.github} target="_blank" rel="noopener noreferrer">
+                                        {member.name}
+                                    </a>
+                                ) : (
+                                    member.name
+                                )}
+                                {member.role === 'Project Lead' ? (
+                                    <span className="projectManager">Project Lead</span>
+                                ) : (
+                                    <span className="developerRole">Developer</span>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <div className="teamGroup2">
+                    <ul>
+                        {team.slice(4).map((member, index) => (
+                            <li key={index + 4} className="teamMember">
+                                {member.github ? (
+                                    <a href={member.github} target="_blank" rel="noopener noreferrer">
+                                        {member.name}
+                                    </a>
+                                ) : (
+                                    member.name
+                                )}
+                                {member.role === 'Project Lead' ? (
+                                    <span className="projectManager">Project Lead</span>
+                                ) : (
+                                    <span className="developerRole">Developer</span>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </aside>
         </div>
     );

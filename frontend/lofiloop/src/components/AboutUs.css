@@ -16,7 +16,7 @@
 .aboutText h2 {
     color: white;
     font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-    font-size: 22px;
+    font-size: 30px;
     font-weight: 700;
     margin-bottom: 15px;
     text-align: center;
@@ -25,7 +25,7 @@
 .aboutText p {
     color: white;
     font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-    font-size: 15px;
+    font-size: 20px;
     line-height: 1.6;
     margin-bottom: 15px;
     text-align: center; /* Center the paragraph text */
@@ -38,7 +38,7 @@
 .teamList h2 {
     color: white;
     font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-    font-size: 22px;
+    font-size: 30px;
     font-weight: 700;
     margin-bottom: 15px;
     text-align: center;
@@ -47,10 +47,28 @@
 .teamList ul {
     list-style: none;
     padding: 0;
+}
+
+.teamGroup1,
+.teamGroup2
+{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 60px;
+}
+
+.teamGroup1 ul
+{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 10px;
+    width: 100%;
+}
+
+.teamGroup2 ul
+{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    width: 100%;
 }
 
 .teamMember {
@@ -60,7 +78,7 @@
     border-radius: 4px;
     color: white;
     font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-    font-size: 15px;
+    font-size: 22px;
     text-align: center;
 }
 

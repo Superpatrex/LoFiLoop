@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import './SignUp.css';
+import { Delay } from 'p5';
+import { useRouter } from 'next/navigation';
 
 const SignUp = () => {
     const [username, setUsername] = useState('');
@@ -62,65 +64,191 @@ const SignUp = () => {
         }
     };
 
+    const [slide, setSlide] = useState(false);
+
+    const handleSlide = () => {
+        const slideElement = document.getElementById("slider");
+        const slideHeader = document.getElementById("slideHeader");
+        const slideClick = document.getElementById("slideClick");
+        if (!slide)
+        {
+            slideElement.classList.add("slideRight");
+            slideElement.classList.remove("slideLeft");
+            slideHeader.innerHTML = "Already have an account?";
+            slideClick.innerHTML = "Login here!";
+        }
+        else
+        {
+            slideElement.classList.add("slideLeft");
+            slideElement.classList.remove("slideRight");
+            slideHeader.innerHTML = "Don't have an account yet?";
+            slideClick.innerHTML = "Create one here!";
+        }
+        setSlide(!slide);
+    }
+
+    const [loginEmail, setLoginEmail] = useState('');
+    const [loginPassword, setLoginPassword] = useState('');
+    const [loginErrors, setLoginErrors] = useState([]);
+    const [loginMessage, setLoginMessage] = useState('');
+    const router = useRouter();
+
+    const validateLoginEmail = (loginEmail) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginEmail);
+
+    const handleLoginSubmit = async(e) => {
+        e.preventDefault();
+        let validationLoginErrors = [];
+
+        if (!validateLoginEmail(loginEmail)) {
+            validationLoginErrors.push('Invalid email format.');
+        }
+        if (loginPassword.trim().length === 0) {
+            validationLoginErrors.push('Password is required.');
+        }
+
+        setLoginErrors(validationLoginErrors);
+        if (loginErrors.length > 0)
+        {
+            if (loginErrors[0] === 'Invalid email format.') {
+                setLoginMessage('Invalid email format.');
+            }
+            else if (loginErrors[0] === 'Password is required.') {
+                setLoginMessage('Password is required.');
+            }
+            setTimeout(() => setLoginMessage(''), 3000);
+            setErrors([]);
+            return;
+        }
+
+        try {
+            const response = await fetch("http://localhost:3001/auth/login", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({loginEmail, loginPassword}),
+            });
+            const data = await response.json();
+            
+            if (data.loginMessage === "Login Successful") {
+                localStorage.setItem("token", data.token);
+                router.push('/chat');
+            } else if (data.loginMessage === "Invalid credentials") {
+                setLoginMessage("Invalid email or password.");
+                setTimeout(() => setLoginMessage(''), 3000);
+            }
+        } catch (error) {
+            console.error(error);
+            setLoginMessage("Login failed. Try again.");
+            setTimeout(() => setMessage(''), 3000);
+        }
+    };
+
     return (
-        <div className="SignUp">
-            <h1>Sign up for an account with us here!</h1>
-            {errors.length > 0 && (
-                <ul className="error-messages">
-                    {errors.map((e,i) => <li key={i}>{e}</li>)}
-                </ul>
-            )}
-            <form onSubmit={handleSubmit}>
-                <div className="form-inputs">
-                    <label>Create Username</label>
-                    <input
-                        type="text"
-                        required
-                        value={username}
-                        onChange={e => setUsername(e.target.value)}
-                    />
-
-                    <label>Email</label>
-                    <input
-                        type="email"
-                        required
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                    />
-                    
-                    <label>Set Password</label>
-                    <input
-                        type="password"
-                        required
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                    />
-
-                    <label>Type Password Again</label>
-                    <input
-                        type="password"
-                        required
-                        value={confirmPassword}
-                        onChange={e => setConfirmPassword(e.target.value)}
-                    />
-                </div>
-
-                <div className="password-requirements">
-                    <h3>Password Requirements:</h3>
-                    <ul>
-                        {tests.map((t, i) => (
-                          <li
-                            key={i}
-                            className={t.test(password) ? 'valid' : 'invalid'}
-                          >
-                            {t.label}
-                          </li>
-                        ))}
+        <div className="LogAndSign">
+            <div className="SignUp">
+                <h1>Sign Up Here!</h1>
+                {errors.length > 0 && (
+                    <ul className="error-messages">
+                        {errors.map((e,i) => <li key={i}>{e}</li>)}
                     </ul>
-                </div>
+                )}
+                <form onSubmit={handleSubmit}>
+                    <div className="form-inputs">
+                        <label>Create Username</label>
+                        <input
+                            type="text"
+                            required
+                            value={username}
+                            onChange={e => setUsername(e.target.value)}
+                        />
 
-                <button type="submit">Sign Up!</button>
-            </form>
+                        <label>Email</label>
+                        <input
+                            type="email"
+                            required
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                        />
+                        
+                        <label>Set Password</label>
+                        <input
+                            type="password"
+                            required
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                        />
+
+                        <label>Type Password Again</label>
+                        <input
+                            type="password"
+                            required
+                            value={confirmPassword}
+                            onChange={e => setConfirmPassword(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="password-requirements">
+                        <h3>Password Requirements:</h3>
+                        <ul>
+                            {tests.map((t, i) => (
+                            <li
+                                key={i}
+                                className={t.test(password) ? 'valid' : 'invalid'}
+                            >
+                                {t.label}
+                            </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <button type="submit">Sign Up!</button>
+                </form>
+            </div>
+            <div className="Login">
+                <div>
+                    <h1>Welcome Back!</h1>
+                </div>
+                <div>
+                    <h2>Please login to start listening</h2>
+                    {message && <p>{message}</p>}
+                    {loginErrors.length > 0 && (
+                        <ul>
+                            {loginErrors.map((error, index) => (
+                                <li key={index}>{error}</li>
+                            ))}
+                        </ul>
+                    )}
+                    <form onSubmit={handleLoginSubmit} >
+                        <label>Email</label>
+                        <input
+                            type="email"
+                            required
+                            value={loginEmail}
+                            onChange={(e) => setLoginEmail(e.target.value)}
+              
+                        />
+                        
+                        <label>Password</label>
+                        <input
+                            type="password"
+                            required
+                            value={loginPassword}
+                            onChange={(e) => setLoginPassword(e.target.value)}
+                       
+                        />
+
+                        <p style={{textAlign: 'right', marginRight: '5%'}}><Link href="/forgot-password">Forgot password?</Link></p>
+                        
+                        <button type="submit">Login</button>
+                    </form>
+                </div>
+            </div>
+            <div className="slider" id="slider">
+                <div className="logo">
+                    <img src="/lofi_loop_logo.png" alt="LoFi Loop Logo"/>
+                </div>
+                <div id="slideHeader">Don't have an account yet?</div> 
+                <p id="slideClick" onClick={handleSlide}>Create one now!</p>
+            </div>
         </div>
     );
 };

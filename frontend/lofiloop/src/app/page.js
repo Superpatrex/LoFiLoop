@@ -1,11 +1,11 @@
 import Layout from "../components/Layout";
-import NavBar from "../components/NavBar"; // Import NavBar component
+import SignUp from "../components/SignUp";
 
 
 export default function Home() {
   return (
     <Layout>
-      <NavBar />
+      <SignUp />
     </Layout>
   );
 }

@@ -5,7 +5,6 @@ import NavBar from "../../components/NavBar"; // Import NavBar component
 export default function SignUpPage() {
   return (
     <Layout>
-      <NavBar />
       <SignUp />
     </Layout>
   );

@@ -1,16 +1,17 @@
 nav {
     background-color: #272c4c;
-    padding: 10px 20px;
+    padding: 5px 20px;
     box-shadow: 0 4px 2px -2px #252337;
     border-radius: 25px;
     border: 1.5px solid #ccc;
-
+    height: 60px;
     position: fixed; /* Make the navbar fixed at the top */
-    top: 50px; /* Align it to the top of the page */
+    top: 10px; /* Align it to the top of the page */
     left: 0;
     width: 100%; /* Make it span the full width of the page */
     z-index: 1000; /* Ensure it stays above other elements */
     margin: 0; /* Remove the bottom margin to avoid spacing issues */
+    user-select: none;
 }
 
 body {
@@ -23,19 +24,23 @@ nav ul {
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: space-around;
+    width: 100%;
 }
 
 nav li {
-    display: inline;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-nav a {
+nav a,
+nav div 
+{
     display: inline-block; /* Added this line */
     color: white;
     text-decoration: none;
     font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-    font-size: 18px;
+    font-size: 25px;
     font-weight: bold;
     transition: transform 0.3s ease, color 0.3s ease;
 }
@@ -43,4 +48,36 @@ nav a {
 nav a:hover {
     color: #848aab;
     transform: scale(1.1);
+}
+
+nav li img
+{
+    height: 50px;
+}
+
+#logo
+{
+    width: 10%;
+}
+
+#aboutUs
+{
+    width: 10%;
+}
+
+#settings
+{
+    width: 79%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+#settings p
+{
+    font-size: 30px;
+    color: white;
+    font-weight: bold;
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    cursor: pointer;
 }

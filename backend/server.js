@@ -6,6 +6,7 @@ const path = require("path");
 const port = process.env.PORT || 3001;
 const openaiRoutes = require("./routes/openaiRoutes");
 const listenersRoutes = require("./routes/listenersRoutes");
+const musicRoutes = require("./routes/musicRoutes");
 const { connectDB } = require("./db");
 const setupWebSocket = require("./websocket");
 const http = require("http");
@@ -23,6 +24,7 @@ app.use(express.json()); // Middleware to parse JSON
 // Routes--------------------------------------------------------------
 
 app.use("/listeners", listenersRoutes);
+app.use("/music", musicRoutes);
 app.use("/openai", openaiRoutes);
 app.use("/api/message", messageRoutes);
 app.use("/auth", authRoutes);

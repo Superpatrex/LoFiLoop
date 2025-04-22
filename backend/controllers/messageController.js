@@ -39,7 +39,7 @@ const sendMessage = async (req, res) => {
         }
 
         // save message
-        const message = new Message({ senderId, text });
+        const message = new Message({ senderId, text, username });
         await message.save();
 
         console.log("Message saved:, " + message);

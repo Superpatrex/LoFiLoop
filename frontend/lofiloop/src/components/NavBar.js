@@ -22,7 +22,7 @@ const NavBar = () => {
           <Link href="/aboutus">About Us</Link>
         </li>
         <li id="settings">
-          <p onClick={() => setShowSettings(!showSettings)}>⚙</p>
+          <p className="hover:scale-110" onClick={() => setShowSettings(!showSettings)}>⚙</p>
         </li>
       </ul>
       {showSettings && (

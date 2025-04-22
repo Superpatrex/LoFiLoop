@@ -1,97 +1,113 @@
 "use client";
 import React, { useRef, useEffect } from "react";
-
-import dynamic from "next/dynamic";
 import p5 from "p5";
 
-// Dynamically import P5Wrapper with no SSR
-const P5Wrapper = dynamic(() => import("./Visualizer"), {
-    ssr: false,
-});
+// Ensure p5.sound is loaded correctly on the client
+if (typeof window !== "undefined") {
+    window.p5 = p5;
+    require("p5/lib/addons/p5.sound");
+}
 
-const Waveform = ({ className }) => {
-    const containerRef = useRef(null); // Ref to access the parent container
+// Accept audioEl and isPlaying as props
+export default function Waveform({ className, audioEl, isPlaying }) {
+  const containerRef = useRef(null);
+  const p5InstanceRef = useRef(null); // Ref to hold the p5 instance
 
-    const sketch = (p) => {
-        let song;
+  useEffect(() => {
+    // Only run if we have an audio element and it's supposed to be playing
+    if (audioEl && isPlaying && containerRef.current) {
+      // If an instance already exists, don't create a new one
+      if (p5InstanceRef.current) {
+        // Make sure it's looping if it was stopped
+        if (!p5InstanceRef.current.isLooping()) {
+          p5InstanceRef.current.loop();
+        }
+        return;
+      }
+
+      const sketch = (p) => {
         let fft;
-
-        p.preload = () => {
-            song = p.loadSound("/Lukrembo_Biscuit.mp3");
-        };
+        let soundSource = null; // To hold the p5 sound source
 
         p.setup = () => {
-            const parent = containerRef.current; // Use the ref to access the parent container
-            const width = parent.offsetWidth;
-            const height = parent.offsetHeight;
+          const { offsetWidth: w, offsetHeight: h } = containerRef.current;
+          p.createCanvas(w, h);
+          p.angleMode(p.DEGREES);
+          // No fill for the lines
+          p.noFill();
 
-            p.createCanvas(width, height); // Dynamically set canvas size to match parent
-            p.angleMode(p.DEGREES);
-            p.rectMode(p.CENTER);
-            fft = new p5.FFT();
-        };
+          // Create FFT analyzer
+          fft = new p5.FFT();
 
-        p.mouseClicked = () => {
-            if (song.isPlaying()) {
-                song.pause();
-                p.noLoop();
-            } else {
-                song.play();
-                p.loop();
-            }
+          // Create a p5 MediaElement from the passed audioEl
+          // This allows p5.sound to analyze it
+          soundSource = new p5.MediaElement(audioEl);
+          fft.setInput(soundSource);
+
+          p.loop(); // Start the draw loop
         };
 
         p.windowResized = () => {
-            const parent = containerRef.current; // Use the ref to access the parent container
-            const width = parent.offsetWidth;
-            const height = parent.offsetHeight;
-
-            p.resizeCanvas(width, height); // Resize canvas on window resize
+          const { offsetWidth: w, offsetHeight: h } = containerRef.current;
+          p.resizeCanvas(w, h);
         };
 
         p.draw = () => {
-            const transparent = p.color(17, 24, 39);
-            p.background(transparent);
+          // Use a transparent background or set the desired color
+          const transparent = p.color(17, 24, 39); // Match example background
+          p.background(transparent);
 
-            p.translate(p.width / 2, p.height / 2);
+          p.translate(p.width / 2, p.height / 2);
 
-            // output between 0 and 255  // for particles speed
-            fft.analyze(); // output between 0 and 255
+          // Analyze the audio
+          fft.analyze();
+          const wave = fft.waveform(); // Get waveform data
 
-            p.fill(0);
-            p.noStroke();
-            p.rect(transparent, p.width, p.height);
+          // Draw waveform lines radiating outwards
+          p.stroke(255); // White lines
+          p.strokeWeight(5); // Thicker lines like example
 
-            // Draw waveform
-            p.stroke(255);
-            p.strokeWeight(5);
-            p.noFill();
+          const innerRadius = p.width * 0.25; // Define inner radius
 
-            const waveform = fft.waveform();
+          for (let i = 0; i <= 360; i += 5) { // Iterate through angles
+            const index = p.floor(p.map(i, 0, 360, 0, wave.length - 1));
+            // Ensure wave[index] is valid before mapping
+            const amplitude = wave[index] || 0;
+            // Map amplitude to outer radius, similar multiplier as example
+            const r = p.map(amplitude * 1.25, -1, 1, innerRadius, p.width * 0.5);
 
-            p.beginShape();
-            for (let i = 0; i <= 360; i += 5) {
-                const index = p.floor(p.map(i, 0, 360, 0, waveform.length - 1));
-                const r = p.map(waveform[index] * 1.25, -1, 1, p.width * 0.30, p.width * 0.5);
+            // Calculate start point (on inner circle)
+            const x1 = innerRadius * p.cos(i);
+            const y1 = innerRadius * p.sin(i);
+            // Calculate end point (based on waveform)
+            const x2 = r * p.cos(i);
+            const y2 = r * p.sin(i);
 
-                const innerRadius = p.width * 0.25; // Adjust dynamically based on canvas size
-                const x1 = innerRadius * p.cos(i);
-                const y1 = innerRadius * p.sin(i);
-                const x2 = r * p.cos(i);
-                const y2 = r * p.sin(i);
-
-                // Draw line from inner to outer point
-                p.line(x1, y1, x2, y2);
-            }
-            p.endShape();
+            // Draw line from inner to outer point
+            p.line(x1, y1, x2, y2);
+          }
         };
+      };
+
+      // Create the p5 instance and store it in the ref
+      p5InstanceRef.current = new p5(sketch, containerRef.current);
+
+    } else if (p5InstanceRef.current) {
+      // If not playing or no audio element, stop the loop
+      p5InstanceRef.current.noLoop();
+    }
+
+    // Cleanup function: remove the p5 instance when the component unmounts
+    // or when audioEl/isPlaying changes causing the effect to re-run differently
+    return () => {
+      if (p5InstanceRef.current) {
+        p5InstanceRef.current.remove();
+        p5InstanceRef.current = null;
+      }
     };
+    // Rerun effect if audioEl or isPlaying changes
+  }, [audioEl, isPlaying]);
 
-    return (
-        <div ref={containerRef} className={className}>
-            <P5Wrapper sketch={sketch} />
-        </div>
-    );
-};
-
-export default Waveform;
+  // Render the container div for p5 canvas
+  return <div ref={containerRef} className={className} />;
+}

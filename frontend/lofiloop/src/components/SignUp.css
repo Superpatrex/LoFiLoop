@@ -124,7 +124,7 @@
 }
 
 .error-messages {
-    color: white;
+    color: red;
     font-family: "Century Gothic", sans-serif;
     font-size: 12px;
     margin-bottom: 10px;
@@ -168,7 +168,7 @@
     color: white;
     font-size: 20px; 
     line-height: 26.4px;
-    margin-bottom: 100px;
+    margin-bottom: 50px;
 }
 
 .Login label {
@@ -226,7 +226,6 @@
 }
 
 .error-messages {
-    color: white;
     font-size: 10px; 
     font-style: normal; 
     font-variant: normal; 

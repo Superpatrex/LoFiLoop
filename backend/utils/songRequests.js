@@ -91,13 +91,13 @@ async function handleQueue() {
 
 async function handleCommands() {
     return {
-        message: `🎵 **Song Request Commands** 🎵
+        message: `🎵 Song Request Commands 🎵
 
 Use the following commands to interact with the song request system:
 
-✅ **/request <song name>** – Add a song to the queue.  
-✅ **/queue** – View the current song queue.
-✅ **/commands** – Display this list of commands.
+✅ /request <song name> – Add a song to the queue.  
+✅ /queue – View the current song queue.
+✅ /commands – Display this list of commands.
 
 Enjoy the music! 🎶`
     };

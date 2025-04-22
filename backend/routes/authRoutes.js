@@ -13,21 +13,12 @@ router.post("/register", async (req, res) => { //recieve the post request
 
     try {
         let user = await User.findOne({ email }); //check if user exists
-        console.log("Log 1");
 
         if (user) return res.status(400).json({ message: "Email already exists" });
-
-        console.log("Log 2");
-
         user = new User({ username, email, password }); //create new user
         await user.save();
-
-        console.log("Log 3");
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        console.log("Log 4");
         const response = await sendSignUpEmail(email);
-        console.log(response);
-        console.log("Log 5");
     } catch (error) {
         res.status(500).json({ message: "Server error " + error });
     }

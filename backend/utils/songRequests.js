@@ -85,7 +85,7 @@ async function handleQueue() {
     ).join("\n");
 
     return { 
-        message: `**Current Song Queue:**\n${queueList}\nNow Playing: ${currentSongData.title} by ${currentSongData.artist}`
+        message: `Current Song Queue:\n${queueList}\n`
     };
 }
 

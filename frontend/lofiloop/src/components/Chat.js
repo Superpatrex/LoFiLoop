@@ -37,13 +37,25 @@ export default function Chat() {
     ["/frontend_backend.png", "Was Frontend Not Backend", "xinyu.wav", "c-mfy"],
     ["/panda.png", "Eating Panda", "eric.wav", "eson39"],
     ["/logo_time.png", "Logo Time!", "aumrita.wav", "aumritam"],
-    ["/improved.png", "Improved", "krupa.wav", "krupaapatell"]
+    ["/improved.png", "Improved", "krupa.wav", "krupaapatell"],
+    //["/i_am_cooking.png", "Jack is cooking", "jack_cooking.wav", "superpatrex"],
+    ["/i_am_so_cool.png", "I am so cool", "cool.wav", "superpatrex"],
+    ["/i_dont_know.png", "I don't know", "alysha2.wav", "artemis"],
+    ["/fine_tuning.png", "Fine Tuning", "calvin2.wav", "calvinc903"],
+    ["/projects.png", "I can't I have projects to do", "jessica2.wav", "0zzy4"],
+    ["/forgotten.png", "Forgotten", "anna2.wav", "zha0anna"],
+    ["/frontend_backend.png", "Was Frontend Now Backend", "xinyu2.wav", "c-mfy"],
+    ["/panda.png", "Eating Panda", "eric2.wav", "eson39"],
+    ["/logo_time.png", "Logo Time!", "aumrita2.wav", "aumritam"],
+    ["/improved.png", "Improved", "krupa2.wav", "krupaapatell"]
   ];
+
+  // Loop through the current songs
+  const [curIndex, setCurIndex] = useState(24);
   
-  const pickRandomSong = () => {
-    const randomIndex = Math.floor(Math.random() * pictureNameSong.length);
-    const randomSong = pictureNameSong[randomIndex];
-    return randomSong;
+  const pickNextSongInList = () => {
+    setCurIndex((curIndex + 1) % pictureNameSong.length);
+    return pictureNameSong[curIndex];
   };
 
   const [curPictureName, setPictureName] = useState(null);
@@ -59,7 +71,7 @@ export default function Chat() {
       setCurrentUserId(decoded.id); // assuming token payload has `id`
     }
 
-    setPictureName(pickRandomSong());
+    setPictureName(pickNextSongInList());
   }, []);
 
   // const currentUserId = "67be4b0a706d6b50fd8ad65a";
@@ -166,7 +178,7 @@ export default function Chat() {
       }
     };
     const handleEnded = () => {
-      const nextSong = pickRandomSong();
+      const nextSong = pickNextSongInList();
       setPictureName(nextSong);
     };
 
@@ -295,7 +307,7 @@ export default function Chat() {
               >
                 <span className="text-2xl" style={{ fontFamily: "'Segoe UI Symbol', 'Arial', 'Helvetica', sans-serif" }}>{isPlaying ? "⏹︎" : "▶"}</span>
               </button>
-              <button 
+              <button
                 className="text-white hover:text-gray-300 px-6 py-2 mx-2 bg-gray-700 rounded-full transition-transform hover:scale-110"
                 onClick={() => {}}
               >
@@ -311,7 +323,7 @@ export default function Chat() {
               const isCurrentUser = msg.senderId === currentUserId;
               return (
                 <div key={msg._id}>
-                  <div className="flex flex-col items-end pr-2">
+                  <div className={`flex flex-col pr-2 ${isCurrentUser ? 'items-end' : 'items-start'}`}>
                     {msg.username}
                   </div>
                   <div
